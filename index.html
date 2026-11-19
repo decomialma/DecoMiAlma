@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DecoMiAlma | Estudio de Gestión, Talleres, Ventas y Contabilidad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            kraft: {
+              50: '#FAF7F2',
+              100: '#F3ECE1',
+              200: '#E6D8C3',
+              300: '#D5BE9E',
+              400: '#C29F75',
+              500: '#A88256',
+              600: '#7C624A',
+              700: '#5E4835',
+              800: '#423224',
+              900: '#2B2017'
+            },
+            terracota: '#C86D44',
+            oliva: '#5E654F'
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #423224;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .logo-box {
+      border: 2px solid #7C624A;
+      background-color: #FFFFFF;
+      padding: 6px 18px 5px 18px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-title {
+      font-family: 'Cormorant Garamond', serif;
+      color: #7C624A;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      line-height: 0.95;
+    }
+    .logo-subtitle {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #7C624A;
+      letter-spacing: 0.24em;
+      font-weight: 400;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #F3ECE1; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #C29F75; border-radius: 9999px; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- ==================== MODO 1: FORMULARIO PÚBLICO PARA CLIENTAS ==================== -->
+  <div id="public-form-shell" class="hidden min-h-screen py-8 px-4 flex items-center justify-center">
+    <div class="max-w-xl w-full bg-white rounded-3xl border border-kraft-200 shadow-xl overflow-hidden">
+      <div class="bg-kraft-100 p-6 text-center border-b border-kraft-200">
+        <div class="logo-box">
+          <div class="logo-title text-4xl">DecoM<span class="relative">ı<span class="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[10px]">◆</span></span>Alma</div>
+          <div class="logo-subtitle text-[9px]">LUZ Y AMOR EN TU HOGAR</div>
+        </div>
+        <h1 id="pub-form-title" class="font-serif text-3xl font-bold text-kraft-900 mt-4">Inscripción y Consultas</h1>
+        <p id="pub-form-subtitle" class="text-xs text-kraft-700 mt-1">Completa tus datos y elegí tu taller, clase regular o producto artesanal.</p>
+      </div>
+
+      <form id="public-submit-form" onsubmit="submitPublicForm(event)" class="p-6 space-y-4 text-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Nombre y Apellido *</label>
+            <input id="pub-name" required type="text" placeholder="Tu nombre completo" class="w-full px-3.5 py-2.5 rounded-xl border border-kraft-300 focus:outline-none focus:border-kraft-600" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">WhatsApp (sin 0 ni 15) *</label>
+            <input id="pub-phone" required type="tel" placeholder="Ej: 3516123456" class="w-full px-3.5 py-2.5 rounded-xl border border-kraft-300 focus:outline-none focus:border-kraft-600" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Instagram o Email</label>
+          <input id="pub-email" type="text" placeholder="@tuusuario o correo" class="w-full px-3.5 py-2.5 rounded-xl border border-kraft-300 focus:outline-none focus:border-kraft-600" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">¿Qué te interesa? *</label>
+          <select id="pub-interest-type" onchange="renderPublicDynamicSelection()" class="w-full px-3.5 py-2.5 rounded-xl border border-kraft-300 bg-white font-semibold">
+            <option value="taller">Inscribirme a un Taller</option>
+            <option value="clase">Anotarme a Clases Regulares (4 clases)</option>
+            <option value="producto">Consultar / Comprar un Producto</option>
+          </select>
+        </div>
+
+        <div id="pub-dynamic-selection" class="space-y-3 bg-kraft-50 p-4 rounded-2xl border border-kraft-200"></div>
+        <div id="pub-custom-fields" class="space-y-3"></div>
+
+        <div class="pt-2 flex flex-col sm:flex-row gap-2">
+          <button type="submit" id="pub-submit-btn" class="flex-1 py-3 bg-terracota hover:opacity-95 text-white rounded-xl font-bold text-sm shadow-sm transition">
+            Enviar Inscripción / Consulta
+          </button>
+          <button type="button" id="pub-back-admin-btn" onclick="exitPublicFormPreview()" class="hidden py-3 px-4 bg-kraft-100 hover:bg-kraft-200 text-kraft-800 rounded-xl font-bold text-xs">
+            Volver al Estudio
+          </button>
+        </div>
+      </form>
+
+      <div id="pub-success-box" class="hidden p-8 text-center space-y-4">
+        <div class="w-14 h-14 mx-auto rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
+          <i data-lucide="check" class="w-8 h-8"></i>
+        </div>
+        <h2 class="font-serif text-3xl font-bold text-kraft-900">¡Recibimos tus datos!</h2>
+        <p class="text-sm text-kraft-700">Tu solicitud ya ingresó automáticamente al estudio de <strong>DecoMiAlma</strong>. Te contactaremos por WhatsApp a la brevedad.</p>
+        <p class="font-serif italic text-xl text-kraft-800">Te espero para compartir una tarde hermosa de creación!<br><span class="not-italic font-sans text-sm font-bold">Abrazo Jime 🤎</span></p>
+        <div class="flex justify-center gap-2">
+          <button onclick="resetPublicForm()" class="px-5 py-2.5 rounded-xl bg-kraft-600 text-white text-xs font-bold">Enviar otra respuesta</button>
+          <button id="pub-success-back-btn" onclick="exitPublicFormPreview()" class="hidden px-5 py-2.5 rounded-xl bg-kraft-100 text-kraft-800 text-xs font-bold">Volver al Estudio</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODO 2: ESTUDIO PRIVADO DE JIME ==================== -->
+  <div id="admin-app-shell" class="min-h-screen flex flex-col md:flex-row pb-24 md:pb-0">
+    <!-- BARRA LATERAL PC -->
+    <aside class="hidden md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 bg-white border-r border-kraft-200 shadow-sm z-30 justify-between">
+      <div>
+        <div class="p-5 flex flex-col items-center border-b border-kraft-100">
+          <div class="logo-box w-full">
+            <div class="logo-title text-4xl">DecoM<span class="relative">ı<span class="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[10px]">◆</span></span>Alma</div>
+            <div class="logo-subtitle text-[9px]">LUZ Y AMOR EN TU HOGAR</div>
+          </div>
+          <span class="text-xs text-kraft-500 mt-2 font-medium">@decomialma • Estudio de Jime</span>
+        </div>
+
+        <nav class="p-3.5 space-y-1">
+          <button onclick="switchTab('inicio')" id="nav-inicio" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-kraft-600 text-white shadow-sm">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> Inicio & Clases
+          </button>
+          <button onclick="switchTab('talleres')" id="nav-talleres" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-kraft-700 hover:bg-kraft-100">
+            <i data-lucide="lamp-ceiling" class="w-4 h-4"></i> Talleres & Proyectos
+          </button>
+          <button onclick="switchTab('calendario')" id="nav-calendario" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-kraft-700 hover:bg-kraft-100">
+            <i data-lucide="calendar-days" class="w-4 h-4"></i> Calendario
+          </button>
+          <button onclick="switchTab('contactos')" id="nav-contactos" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-kraft-700 hover:bg-kraft-100">
+            <i data-lucide="users" class="w-4 h-4"></i> Contactos y Detalles
+          </button>
+          <button onclick="switchTab('productos')" id="nav-productos" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-kraft-700 hover:bg-kraft-100">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i> Productos y Ventas
+          </button>
+          <button onclick="switchTab('contabilidad')" id="nav-contabilidad" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-kraft-700 hover:bg-kraft-100">
+            <i data-lucide="calculator" class="w-4 h-4"></i> Contabilidad
+          </button>
+        </nav>
+      </div>
+
+      <!-- PIE BARRA LATERAL: CREADOR DE FORMULARIO PROPIO + SHEETS -->
+      <div class="p-3.5 border-t border-kraft-100 bg-kraft-50/70 space-y-2">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-semibold text-kraft-700 flex items-center gap-1.5">
+            <span id="sync-dot" class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span id="sync-status">Modo Local</span>
+          </span>
+          <button onclick="syncWithCloud()" title="Sincronizar ahora" class="text-kraft-600 hover:text-kraft-900 p-1">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+        <button onclick="openFormBuilderModal()" class="w-full py-2 px-3 bg-terracota hover:opacity-95 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition">
+          <i data-lucide="clipboard-edit" class="w-3.5 h-3.5"></i> Crear Formulario & Link
+        </button>
+        <button onclick="openConfigModal()" class="w-full py-2 px-3 bg-white border border-kraft-300 rounded-lg text-xs font-semibold text-kraft-700 hover:bg-kraft-100 flex items-center justify-center gap-1.5 transition">
+          <i data-lucide="settings" class="w-3.5 h-3.5"></i> Sheets, Ubicación y Alias
+        </button>
+      </div>
+    </aside>
+
+    <!-- CABECERA MÓVIL -->
+    <header class="md:hidden bg-white border-b border-kraft-200 px-4 py-2.5 flex items-center justify-between sticky top-0 z-20">
+      <div class="logo-box py-1 px-3">
+        <div class="logo-title text-2xl">DecoMiAlma</div>
+        <div class="logo-subtitle text-[7px]">LUZ Y AMOR EN TU HOGAR</div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button onclick="openFormBuilderModal()" title="Formulario" class="p-2 rounded-lg bg-terracota text-white"><i data-lucide="clipboard-edit" class="w-4 h-4"></i></button>
+        <button onclick="syncWithCloud()" title="Sincronizar" class="p-2 rounded-lg bg-kraft-100 text-kraft-700"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+        <button onclick="openConfigModal()" title="Config" class="p-2 rounded-lg bg-kraft-100 text-kraft-700"><i data-lucide="settings" class="w-4 h-4"></i></button>
+      </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1 md:ml-72 p-4 md:p-8 max-w-7xl w-full mx-auto">
+
+      <!-- ==================== VISTA 1: INICIO & CLASES REGULARES ==================== -->
+      <section id="view-inicio" class="space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-kraft-200 shadow-sm">
+          <div>
+            <span class="text-xs uppercase tracking-widest text-terracota font-bold">Estudio Integral • @decomialma</span>
+            <h1 class="font-serif text-3xl md:text-4xl font-semibold text-kraft-800 mt-0.5">Panel General DecoMiAlma</h1>
+            <p class="text-sm text-kraft-600 mt-1">Talleres, clases regulares, productos, formulario propio y contabilidad 100% integrados.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="openWorkshopModal()" class="px-3.5 py-2.5 bg-kraft-600 hover:bg-kraft-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Nuevo Taller
+            </button>
+            <button onclick="openRegClassModal()" class="px-3.5 py-2.5 bg-oliva hover:opacity-95 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="calendar-plus" class="w-4 h-4"></i> Clase Regular
+            </button>
+            <button onclick="openRegistrationModal()" class="px-3.5 py-2.5 bg-terracota hover:opacity-95 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="user-plus" class="w-4 h-4"></i> Inscribir
+            </button>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="flex items-center justify-between text-kraft-500 text-xs font-semibold uppercase">
+              <span>Próximo Taller</span><i data-lucide="calendar-clock" class="w-4 h-4 text-terracota"></i>
+            </div>
+            <div id="kpi-next-title" class="font-serif text-2xl font-bold text-kraft-800 mt-2 truncate">-</div>
+            <div id="kpi-next-date" class="text-xs text-kraft-600 mt-1">-</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="flex items-center justify-between text-kraft-500 text-xs font-semibold uppercase">
+              <span>Inscriptas & Créditos</span><i data-lucide="users" class="w-4 h-4 text-oliva"></i>
+            </div>
+            <div id="kpi-total-students" class="font-serif text-3xl font-bold text-kraft-800 mt-2">0</div>
+            <div id="kpi-credits-count" class="text-xs text-kraft-600 mt-1">0 créditos por reubicar</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="flex items-center justify-between text-kraft-500 text-xs font-semibold uppercase">
+              <span>Ingresos Cobrados</span><i data-lucide="wallet" class="w-4 h-4 text-emerald-600"></i>
+            </div>
+            <div id="kpi-collected" class="font-serif text-3xl font-bold text-emerald-700 mt-2">$0</div>
+            <div class="text-xs text-kraft-600 mt-1">Talleres, Clases y Ventas</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="flex items-center justify-between text-kraft-500 text-xs font-semibold uppercase">
+              <span>Saldos por Cobrar</span><i data-lucide="alert-circle" class="w-4 h-4 text-amber-600"></i>
+            </div>
+            <div id="kpi-pending" class="font-serif text-3xl font-bold text-amber-700 mt-2">$0</div>
+            <div class="text-xs text-kraft-600 mt-1">Pendiente de ingreso</div>
+          </div>
+        </div>
+
+        <!-- CLASES REGULARES (4 CLASES, 1X SEMANA, CUPO BASE 4) -->
+        <div class="bg-white rounded-2xl border border-kraft-200 shadow-sm p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-kraft-100 pb-3">
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <h2 class="font-serif text-2xl font-bold text-kraft-800">Clases Regulares</h2>
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-kraft-100 text-kraft-700">4 clases • 1x semana • Cupo base 4</span>
+              </div>
+              <p class="text-xs text-kraft-500 mt-0.5">Tilda la asistencia de cada alumna y suma proyectos extra con su costo adicional.</p>
+            </div>
+            <button onclick="openRegClassModal()" class="px-3.5 py-2 bg-kraft-100 hover:bg-kraft-200 text-kraft-800 rounded-xl text-xs font-bold flex items-center gap-1.5 self-start sm:self-auto">
+              <i data-lucide="plus" class="w-4 h-4"></i> Nuevo Grupo
+            </button>
+          </div>
+          <div id="regular-classes-container" class="space-y-4"></div>
+        </div>
+
+        <!-- PENDIENTES + PRÓXIMOS TALLERES -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 bg-white rounded-2xl border border-kraft-200 shadow-sm p-5">
+            <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+              <div>
+                <h2 class="font-serif text-2xl font-bold text-kraft-800">Pendientes de Seña / Saldo</h2>
+                <p class="text-xs text-kraft-500">Envía Ficha en texto por WhatsApp</p>
+              </div>
+              <span id="badge-pending-count" class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0</span>
+            </div>
+            <div id="dashboard-pending-list" class="divide-y divide-kraft-100 mt-3 max-h-80 overflow-y-auto custom-scroll"></div>
+          </div>
+
+          <div class="lg:col-span-7 bg-white rounded-2xl border border-kraft-200 shadow-sm p-5">
+            <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+              <div>
+                <h2 class="font-serif text-2xl font-bold text-kraft-800">Próximos Talleres</h2>
+                <p class="text-xs text-kraft-500">Clic para abrir inscriptas, ficha, desinscribir o flyer</p>
+              </div>
+              <button onclick="switchTab('talleres')" class="text-xs font-semibold text-kraft-600 hover:text-kraft-900">Ver todos →</button>
+            </div>
+            <div id="dashboard-workshops-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== VISTA 2: TALLERES & PROYECTOS ==================== -->
+      <section id="view-talleres" class="hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-kraft-200 shadow-sm">
+          <div>
+            <h1 class="font-serif text-3xl font-bold text-kraft-800">Talleres y Proyectos</h1>
+            <p class="text-sm text-kraft-600">Agrega, edita o elimina talleres y gestiona el catálogo de proyectos con sus fotos de ejemplo.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="openProjectManagerModal()" class="px-4 py-2.5 bg-kraft-100 hover:bg-kraft-200 text-kraft-800 rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i data-lucide="image" class="w-4 h-4"></i> Proyectos e Imágenes
+            </button>
+            <button onclick="openWorkshopModal()" class="px-4 py-2.5 bg-kraft-600 hover:bg-kraft-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="plus" class="w-4 h-4"></i> Nuevo Taller
+            </button>
+          </div>
+        </div>
+        <div id="workshops-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </section>
+
+      <!-- ==================== VISTA 3: CALENDARIO ==================== -->
+      <section id="view-calendario" class="hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-kraft-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 class="font-serif text-3xl font-bold text-kraft-800">Calendario de Talleres</h1>
+            <p class="text-sm text-kraft-600">Toca cualquier taller en la fecha para abrir sus inscriptas y pagos.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="changeMonth(-1)" class="p-2 rounded-xl border border-kraft-200 hover:bg-kraft-100"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+            <span id="calendar-month-label" class="font-serif text-2xl font-bold text-kraft-800 min-w-[180px] text-center capitalize">-</span>
+            <button onclick="changeMonth(1)" class="p-2 rounded-xl border border-kraft-200 hover:bg-kraft-100"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl border border-kraft-200 shadow-sm overflow-hidden">
+          <div class="grid grid-cols-7 bg-kraft-100 border-b border-kraft-200 text-center py-2.5 text-xs font-bold uppercase text-kraft-700">
+            <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+          </div>
+          <div id="calendar-grid" class="grid grid-cols-7 divide-x divide-y divide-kraft-100"></div>
+        </div>
+      </section>
+
+      <!-- ==================== VISTA 4: CONTACTOS Y DETALLES ==================== -->
+      <section id="view-contactos" class="hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-kraft-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="font-serif text-3xl font-bold text-kraft-800">Contactos y Detalles</h1>
+            <p class="text-sm text-kraft-600">Agenda dinámica: alumnas (talleres hechos/en curso/futuros, proyectos, créditos) e interesadas en productos.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <input id="search-contact" oninput="renderContacts()" type="text" placeholder="Buscar nombre o WhatsApp..." class="px-3.5 py-2 rounded-xl border border-kraft-300 text-xs bg-kraft-50/50 focus:outline-none focus:border-kraft-600" />
+            <select id="filter-contact-role" onchange="renderContacts()" class="px-3 py-2 rounded-xl border border-kraft-300 text-xs bg-white font-semibold">
+              <option value="todos">Todos los roles</option>
+              <option value="Alumna">Alumnas</option>
+              <option value="Producto">Interesadas / Ventas</option>
+              <option value="Ambos">Alumna + Producto</option>
+            </select>
+            <button onclick="openContactModal()" class="px-4 py-2 bg-terracota hover:opacity-95 text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i data-lucide="user-plus" class="w-4 h-4"></i> Nuevo Contacto
+            </button>
+          </div>
+        </div>
+        <div id="contacts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      </section>
+
+      <!-- ==================== VISTA 5: PRODUCTOS Y VENTAS ==================== -->
+      <section id="view-productos" class="hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-kraft-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="font-serif text-3xl font-bold text-kraft-800">Productos y Ventas</h1>
+            <p class="text-sm text-kraft-600">Gestiona tu catálogo, stock, costos, precios de venta, fotos y registra ventas conectadas a Contabilidad.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <input id="filter-prod-search" oninput="renderProducts()" type="text" placeholder="Buscar producto..." class="px-3.5 py-2 rounded-xl border border-kraft-300 text-xs bg-kraft-50/50" />
+            <select id="filter-prod-stock" onchange="renderProducts()" class="px-3 py-2 rounded-xl border border-kraft-300 text-xs bg-white font-semibold">
+              <option value="todos">Todo el stock</option>
+              <option value="disponible">Con stock</option>
+              <option value="agotado">Sin stock (0)</option>
+            </select>
+            <button onclick="openSaleModal()" class="px-3.5 py-2 bg-oliva text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i> Registrar Venta
+            </button>
+            <button onclick="openProductModal()" class="px-3.5 py-2 bg-kraft-600 hover:bg-kraft-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i data-lucide="plus" class="w-4 h-4"></i> Nuevo Producto
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-4 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="text-[11px] font-bold uppercase text-kraft-500">Productos en Catálogo</div>
+            <div id="prod-kpi-count" class="font-serif text-3xl font-bold text-kraft-800 mt-1">0</div>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="text-[11px] font-bold uppercase text-kraft-500">Unidades en Stock</div>
+            <div id="prod-kpi-stock" class="font-serif text-3xl font-bold text-kraft-800 mt-1">0</div>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="text-[11px] font-bold uppercase text-kraft-500">Unidades Vendidas</div>
+            <div id="prod-kpi-sold" class="font-serif text-3xl font-bold text-terracota mt-1">0</div>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="text-[11px] font-bold uppercase text-kraft-500">Total Ventas ($)</div>
+            <div id="prod-kpi-revenue" class="font-serif text-3xl font-bold text-emerald-700 mt-1">$0</div>
+          </div>
+        </div>
+
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+        <div class="bg-white rounded-2xl border border-kraft-200 shadow-sm p-5">
+          <h2 class="font-serif text-2xl font-bold text-kraft-800 border-b border-kraft-100 pb-2">Últimas Ventas Registradas</h2>
+          <div id="sales-history-list" class="divide-y divide-kraft-100 mt-2"></div>
+        </div>
+      </section>
+
+      <!-- ==================== VISTA 6: CONTABILIDAD (RESUMEN + TABLA EDITABLE) ==================== -->
+      <section id="view-contabilidad" class="hidden space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-kraft-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h1 class="font-serif text-3xl font-bold text-kraft-800">Contabilidad y Costos</h1>
+            <p class="text-sm text-kraft-600">Alterna entre el panel resumen y la vista tabla filtrable para agregar, editar o eliminar movimientos.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex rounded-xl border border-kraft-300 bg-kraft-50 p-1">
+              <button onclick="setAccountingView('resumen')" id="btn-acc-resumen" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-kraft-600 text-white">Vista Resumen</button>
+              <button onclick="setAccountingView('tabla')" id="btn-acc-tabla" class="px-3 py-1.5 rounded-lg text-xs font-bold text-kraft-700">Vista Tabla</button>
+            </div>
+            <button onclick="exportAccountingCSV()" class="px-3 py-2 rounded-xl border border-kraft-300 bg-white hover:bg-kraft-100 text-kraft-700 text-xs font-bold flex items-center gap-1.5">
+              <i data-lucide="download" class="w-4 h-4"></i> CSV
+            </button>
+            <button onclick="openAccountEntryModal()" class="px-3.5 py-2 bg-terracota hover:opacity-95 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="plus" class="w-4 h-4"></i> Agregar Movimiento
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="text-xs font-bold uppercase text-kraft-500">Ingresos Totales</div>
+            <div id="acc-income" class="font-serif text-3xl font-bold text-emerald-700 mt-1">$0</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="text-xs font-bold uppercase text-kraft-500">Costos / Gastos</div>
+            <div id="acc-expenses" class="font-serif text-3xl font-bold text-red-700 mt-1">$0</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="text-xs font-bold uppercase text-kraft-500">Balance Neto</div>
+            <div id="acc-net" class="font-serif text-3xl font-bold text-kraft-900 mt-1">$0</div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-kraft-200 shadow-sm">
+            <div class="text-xs font-bold uppercase text-kraft-500">Saldos a Cobrar</div>
+            <div id="acc-receivable" class="font-serif text-3xl font-bold text-amber-700 mt-1">$0</div>
+            <div id="acc-credits-sub" class="text-[11px] text-kraft-500 mt-0.5">Créditos a favor: $0</div>
+          </div>
+        </div>
+
+        <!-- SUBVISTA A: RESUMEN -->
+        <div id="acc-view-resumen" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-6 bg-white rounded-2xl border border-kraft-200 shadow-sm p-5">
+            <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+              <h2 class="font-serif text-2xl font-bold text-kraft-800">Gastos (Materiales, Break e Insumos)</h2>
+              <button onclick="openAccountEntryModal(null, 'Gasto')" class="text-xs font-bold text-terracota hover:underline">+ Gasto</button>
+            </div>
+            <div id="expenses-list" class="divide-y divide-kraft-100 mt-3 max-h-96 overflow-y-auto custom-scroll"></div>
+          </div>
+          <div class="lg:col-span-6 bg-white rounded-2xl border border-kraft-200 shadow-sm p-5">
+            <div class="border-b border-kraft-100 pb-3">
+              <h2 class="font-serif text-2xl font-bold text-kraft-800">Cuentas Vinculadas (Talleres, Clases y Ventas)</h2>
+            </div>
+            <div id="accounting-ledger-list" class="divide-y divide-kraft-100 mt-3 max-h-96 overflow-y-auto custom-scroll"></div>
+          </div>
+        </div>
+
+        <!-- SUBVISTA B: TABLA DINÁMICA CON FILTROS, EDITAR Y ELIMINAR -->
+        <div id="acc-view-tabla" class="hidden bg-white rounded-2xl border border-kraft-200 shadow-sm p-5 space-y-4">
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-2.5">
+            <input id="acc-f-search" oninput="renderAccountingTable()" type="text" placeholder="Buscar detalle o persona..." class="px-3 py-2 rounded-xl border border-kraft-300 text-xs bg-kraft-50/50" />
+            <select id="acc-f-type" onchange="renderAccountingTable()" class="px-3 py-2 rounded-xl border border-kraft-300 text-xs bg-white">
+              <option value="todos">Tipo: Todos</option>
+              <option value="Ingreso">Ingresos</option>
+              <option value="Gasto">Gastos / Costos</option>
+            </select>
+            <select id="acc-f-workshop" onchange="renderAccountingTable()" class="px-3 py-2 rounded-xl border border-kraft-300 text-xs bg-white"></select>
+            <select id="acc-f-project" onchange="renderAccountingTable()" class="px-3 py-2 rounded-xl border border-kraft-300 text-xs bg-white capitalize"></select>
+            <select id="acc-f-category" onchange="renderAccountingTable()" class="px-3 py-2 rounded-xl border border-kraft-300 text-xs bg-white">
+              <option value="todos">Rubro: Todos</option>
+              <option value="Taller">Taller</option>
+              <option value="Clase Regular">Clase Regular</option>
+              <option value="Venta Producto">Venta Producto</option>
+              <option value="Materiales y Kraft">Materiales y Kraft</option>
+              <option value="Insumos Break / Merienda">Insumos Break / Merienda</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-kraft-100 text-kraft-700 uppercase text-[10px]">
+                  <th class="p-3">Fecha</th>
+                  <th class="p-3">Tipo</th>
+                  <th class="p-3">Rubro</th>
+                  <th class="p-3">Detalle / Persona</th>
+                  <th class="p-3">Taller / Proyecto</th>
+                  <th class="p-3 text-right">Monto ($)</th>
+                  <th class="p-3 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="accounting-table-body" class="divide-y divide-kraft-100"></tbody>
+              <tfoot id="accounting-table-foot" class="bg-kraft-50 font-bold text-kraft-900 border-t-2 border-kraft-200"></tfoot>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- NAVEGACIÓN MÓVIL -->
+    <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-kraft-200 grid grid-cols-6 py-1.5 z-30 shadow-lg">
+      <button onclick="switchTab('inicio')" id="mnav-inicio" class="flex flex-col items-center py-1 text-kraft-700 font-bold"><i data-lucide="sparkles" class="w-4 h-4"></i><span class="text-[9px]">Inicio</span></button>
+      <button onclick="switchTab('talleres')" id="mnav-talleres" class="flex flex-col items-center py-1 text-kraft-400"><i data-lucide="lamp-ceiling" class="w-4 h-4"></i><span class="text-[9px]">Talleres</span></button>
+      <button onclick="switchTab('calendario')" id="mnav-calendario" class="flex flex-col items-center py-1 text-kraft-400"><i data-lucide="calendar-days" class="w-4 h-4"></i><span class="text-[9px]">Agenda</span></button>
+      <button onclick="switchTab('contactos')" id="mnav-contactos" class="flex flex-col items-center py-1 text-kraft-400"><i data-lucide="users" class="w-4 h-4"></i><span class="text-[9px]">Contactos</span></button>
+      <button onclick="switchTab('productos')" id="mnav-productos" class="flex flex-col items-center py-1 text-kraft-400"><i data-lucide="shopping-bag" class="w-4 h-4"></i><span class="text-[9px]">Ventas</span></button>
+      <button onclick="switchTab('contabilidad')" id="mnav-contabilidad" class="flex flex-col items-center py-1 text-kraft-400"><i data-lucide="calculator" class="w-4 h-4"></i><span class="text-[9px]">Costos</span></button>
+    </nav>
+  </div>
+
+  <!-- ==================== MODALES ==================== -->
+
+  <!-- MODAL: CREADOR DE FORMULARIO PROPIO -->
+  <div id="modal-form-builder" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <div>
+          <h3 class="font-serif text-2xl font-bold text-kraft-800">Constructor de Formulario DecoMiAlma</h3>
+          <p class="text-xs text-kraft-500">Personaliza las preguntas y comparte el link. Las respuestas ingresan directo al sistema.</p>
+        </div>
+        <button onclick="closeModal('modal-form-builder')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div>
+          <label class="block font-bold uppercase text-kraft-600 mb-1">Título del Formulario</label>
+          <input id="fb-title" type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" />
+        </div>
+        <div>
+          <label class="block font-bold uppercase text-kraft-600 mb-1">Subtítulo / Invitación</label>
+          <input id="fb-subtitle" type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" />
+        </div>
+      </div>
+
+      <div class="bg-kraft-50 p-4 rounded-xl border border-kraft-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase text-kraft-700">Preguntas Personalizadas Adicionales</span>
+          <button type="button" onclick="addFormBuilderField()" class="px-3 py-1 rounded-lg bg-kraft-600 text-white text-xs font-bold">+ Agregar Pregunta</button>
+        </div>
+        <div id="fb-fields-list" class="space-y-2"></div>
+      </div>
+
+      <div class="bg-emerald-50/70 p-4 rounded-xl border border-emerald-200 space-y-2">
+        <div class="text-xs font-bold text-emerald-900">Link público listo para enviar por Instagram o WhatsApp:</div>
+        <div class="flex gap-2">
+          <input id="fb-generated-link" type="text" readonly class="flex-1 px-3 py-2 rounded-lg border border-emerald-300 bg-white text-xs text-kraft-800" />
+          <button onclick="copyPublicFormLink()" class="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">Copiar Link</button>
+        </div>
+        <p class="text-[11px] text-emerald-800">Al publicar este archivo (GitHub Pages o Vercel) y cargar tu URL de Apps Script en Configuración, cualquier clienta podrá completarlo desde su celular.</p>
+      </div>
+
+      <div class="flex flex-wrap justify-between gap-2 pt-2">
+        <button onclick="openPublicFormPreview()" class="px-4 py-2 rounded-xl bg-kraft-100 hover:bg-kraft-200 text-kraft-800 text-xs font-bold flex items-center gap-1.5">
+          <i data-lucide="eye" class="w-4 h-4"></i> Probar Formulario Ahora
+        </button>
+        <div class="flex gap-2">
+          <button onclick="closeModal('modal-form-builder')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cerrar</button>
+          <button onclick="saveFormBuilderConfig()" class="px-5 py-2 rounded-xl bg-terracota text-white text-xs font-bold">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALLE DE TALLER -->
+  <div id="modal-workshop-detail" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-5 bg-kraft-100 border-b border-kraft-200 flex items-start justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <img id="detail-project-img" src="" alt="Proyecto" class="w-16 h-16 rounded-xl object-cover border border-kraft-300 bg-white shrink-0" />
+          <div>
+            <span id="detail-project-badge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-kraft-600 text-white capitalize">Proyecto</span>
+            <h2 id="detail-title" class="font-serif text-3xl font-bold text-kraft-900 mt-1">-</h2>
+            <p id="detail-meta" class="text-xs text-kraft-700 mt-0.5"></p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-workshop-detail')" class="p-2 rounded-lg bg-white text-kraft-700 hover:bg-kraft-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-5 overflow-y-auto custom-scroll space-y-5 flex-1">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-kraft-50 p-4 rounded-xl border border-kraft-200">
+          <div><div class="text-[11px] uppercase text-kraft-500 font-semibold">Tarifa</div><div id="detail-price" class="font-serif text-2xl font-bold text-kraft-800">$0</div></div>
+          <div><div class="text-[11px] uppercase text-kraft-500 font-semibold">Seña</div><div id="detail-deposit" class="font-serif text-2xl font-bold text-kraft-700">$0</div></div>
+          <div><div class="text-[11px] uppercase text-kraft-500 font-semibold">Cobrado</div><div id="detail-collected" class="font-serif text-2xl font-bold text-emerald-700">$0</div></div>
+          <div><div class="text-[11px] uppercase text-kraft-500 font-semibold">Saldo</div><div id="detail-pending" class="font-serif text-2xl font-bold text-amber-700">$0</div></div>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-serif text-2xl font-bold text-kraft-800">Inscriptas</h3>
+          <div class="flex flex-wrap gap-2">
+            <button id="btn-detail-flyer" class="px-3.5 py-2 bg-kraft-200 hover:bg-kraft-300 text-kraft-900 rounded-xl text-xs font-bold flex items-center gap-1.5"><i data-lucide="image" class="w-4 h-4"></i> Flyer Instagram</button>
+            <button id="btn-detail-add-student" class="px-3.5 py-2 bg-terracota text-white rounded-xl text-xs font-bold flex items-center gap-1.5"><i data-lucide="user-plus" class="w-4 h-4"></i> Agregar Inscripta</button>
+          </div>
+        </div>
+        <div id="detail-students-list" class="space-y-2.5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIGURAR TALLER -->
+  <div id="modal-workshop-form" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Configurar Taller</h3>
+        <button onclick="closeModal('modal-workshop-form')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveWorkshop(event)" class="space-y-3.5 text-sm">
+        <input type="hidden" id="ws-id" />
+        <div>
+          <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Nombre del Taller *</label>
+          <input id="ws-title" required type="text" placeholder="Ej: Workshop Espejo Kraft" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300" />
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-xs font-bold uppercase text-kraft-600">Proyecto *</label>
+            <button type="button" onclick="toggleInlineNewProject()" class="text-xs font-bold text-terracota hover:underline">+ Agregar proyecto nuevo</button>
+          </div>
+          <select id="ws-project" onchange="previewSelectedProjectInWorkshop()" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300 bg-white capitalize"></select>
+          <div id="inline-new-project-box" class="hidden mt-2 p-3 rounded-xl bg-kraft-50 border border-kraft-200 space-y-2">
+            <div class="text-xs font-bold text-kraft-800">Nuevo Proyecto (queda guardado en la base)</div>
+            <div class="flex gap-2">
+              <input id="inline-proj-name" type="text" placeholder="Nombre del proyecto" class="flex-1 px-3 py-1.5 rounded-lg border border-kraft-300 text-xs bg-white" />
+              <button type="button" onclick="addProjectInline()" class="px-3 py-1.5 rounded-lg bg-kraft-600 text-white text-xs font-bold">Guardar</button>
+            </div>
+            <input id="inline-proj-file" type="file" accept="image/*" class="text-[11px] w-full" />
+          </div>
+          <div class="mt-2 flex items-center gap-3 bg-kraft-50/70 p-2 rounded-xl border border-kraft-100">
+            <img id="ws-proj-preview" src="" alt="Proyecto" class="w-12 h-12 rounded-lg object-cover border border-kraft-200 bg-white" />
+            <span class="text-xs text-kraft-600">Imagen vinculada automáticamente al proyecto.</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Fecha *</label><input id="ws-date" required type="date" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Horario *</label><input id="ws-time" required type="text" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Cupo *</label><input id="ws-capacity" required type="number" min="1" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Tarifa ($) *</label><input id="ws-price" required type="number" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Seña ($) *</label><input id="ws-deposit" required type="number" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Notas / Qué incluye</label><textarea id="ws-notes" rows="2" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300"></textarea></div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-workshop-form')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-kraft-600 text-white text-xs font-bold">Guardar Taller</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: INSCRIBIR / EDITAR INSCRIPCIÓN -->
+  <div id="modal-registration-form" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Inscripción a Taller</h3>
+        <button onclick="closeModal('modal-registration-form')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveRegistration(event)" class="space-y-3.5 text-sm">
+        <input type="hidden" id="reg-id" />
+        <input type="hidden" id="reg-credit-id" />
+        <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Taller *</label><select id="reg-workshop" required onchange="onSelectWorkshopForReg()" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300 bg-white"></select></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Nombre *</label><input id="reg-name" required type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">WhatsApp *</label><input id="reg-phone" required type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Email / IG</label><input id="reg-email" type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Proyecto Elegido *</label><select id="reg-project" onchange="previewRegProjectImage()" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white capitalize"></select></div>
+        </div>
+        <div class="flex items-center gap-3 bg-kraft-50 p-2.5 rounded-xl border border-kraft-200">
+          <img id="reg-proj-img" src="" alt="Proyecto" class="w-14 h-14 rounded-lg object-cover border border-kraft-300 bg-white" />
+          <div class="text-xs"><div class="font-bold text-kraft-800">Imagen automática del proyecto</div><div id="reg-proj-label" class="capitalize text-kraft-500">-</div></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 bg-kraft-50 p-3 rounded-xl border border-kraft-200">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Tarifa ($)</label><input id="reg-total" required type="number" class="w-full px-3 py-1.5 rounded-lg border border-kraft-300 bg-white font-bold" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Abonado / Seña ($)</label><input id="reg-paid" required type="number" class="w-full px-3 py-1.5 rounded-lg border border-kraft-300 bg-white font-bold text-emerald-700" /></div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Observaciones</label><input id="reg-notes" type="text" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300" /></div>
+        <div class="pt-2 flex justify-between items-center gap-2">
+          <button type="button" id="btn-reg-unenroll" onclick="unenrollFromForm()" class="hidden px-3.5 py-2 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-bold">Desinscribir</button>
+          <div class="flex gap-2 ml-auto">
+            <button type="button" onclick="closeModal('modal-registration-form')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cancelar</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-terracota text-white text-xs font-bold">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: FICHA OFICIAL DE INSCRIPCIÓN (SOLO TEXTO EN WHATSAPP + FOTO EN PANTALLA) -->
+  <div id="modal-ficha" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Ficha Oficial de Inscripción</h3>
+        <button onclick="closeModal('modal-ficha')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="bg-kraft-50 border border-kraft-200 rounded-2xl p-4 space-y-3">
+        <div class="flex items-center gap-4">
+          <img id="ficha-img" src="" alt="Proyecto" class="w-24 h-24 rounded-xl object-cover border-2 border-kraft-300 bg-white shrink-0" />
+          <div>
+            <div id="ficha-workshop" class="font-serif text-2xl font-bold text-kraft-900 leading-tight">-</div>
+            <div id="ficha-student" class="text-sm font-semibold text-kraft-700">-</div>
+            <div id="ficha-project" class="text-xs font-bold uppercase text-terracota">-</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 bg-white p-3 rounded-xl border border-kraft-200 text-center">
+          <div><div class="text-[10px] uppercase text-kraft-500 font-bold">Tarifa</div><div id="ficha-total" class="font-bold text-sm">$0</div></div>
+          <div><div class="text-[10px] uppercase text-kraft-500 font-bold">Abonado</div><div id="ficha-paid" class="font-bold text-sm text-emerald-700">$0</div></div>
+          <div><div class="text-[10px] uppercase text-kraft-500 font-bold">Saldo</div><div id="ficha-saldo" class="font-bold text-sm text-amber-700">$0</div></div>
+        </div>
+        <div class="text-xs text-kraft-700 bg-white p-3 rounded-xl border border-kraft-100 space-y-1">
+          <div><strong>Fecha y horario:</strong> <span id="ficha-datetime">-</span></div>
+          <div><strong>Dirección / Ubicación:</strong> <span id="ficha-location">-</span></div>
+        </div>
+        <div class="text-center text-sm text-kraft-800">
+          <p class="font-serif italic text-lg">Te espero para compartir una tarde hermosa de creación!</p>
+          <p class="font-bold">Abrazo Jime 🤎</p>
+        </div>
+      </div>
+      <div>
+        <label class="block text-[11px] font-bold uppercase text-kraft-500 mb-1">Mensaje de Texto para WhatsApp (sin imagen)</label>
+        <textarea id="ficha-wa-preview" rows="7" readonly class="w-full p-3 rounded-xl bg-kraft-50 border border-kraft-200 text-xs text-kraft-800"></textarea>
+      </div>
+      <div class="flex flex-wrap justify-between gap-2">
+        <button id="btn-ficha-unenroll" class="px-3.5 py-2.5 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-bold">Desinscribir</button>
+        <button id="btn-ficha-send-wa" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-2"><i data-lucide="send" class="w-4 h-4"></i> Enviar Texto WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: FLYER INSTAGRAM -->
+  <div id="modal-flyer" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-3xl w-full p-6 shadow-2xl grid grid-cols-1 md:grid-cols-12 gap-6 max-h-[92vh] overflow-y-auto">
+      <div class="md:col-span-5 space-y-3 text-xs">
+        <div class="flex items-center justify-between border-b border-kraft-100 pb-2">
+          <h3 class="font-serif text-2xl font-bold text-kraft-800">Flyer Instagram</h3>
+          <button onclick="closeModal('modal-flyer')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <div><label class="font-bold uppercase text-kraft-600 block mb-1">Foto de Fondo</label><input type="file" accept="image/*" onchange="handleFlyerImage(event)" class="w-full" /></div>
+        <div><label class="font-bold uppercase text-kraft-600 block mb-1">Título</label><input id="flyer-title" oninput="drawFlyer()" class="w-full px-3 py-2 rounded-lg border border-kraft-300" /></div>
+        <div><label class="font-bold uppercase text-kraft-600 block mb-1">Fecha / Horario</label><input id="flyer-subtitle" oninput="drawFlyer()" class="w-full px-3 py-2 rounded-lg border border-kraft-300" /></div>
+        <div><label class="font-bold uppercase text-kraft-600 block mb-1">Pie</label><input id="flyer-footer" oninput="drawFlyer()" value="Cupos limitados • Incluye materiales y merienda" class="w-full px-3 py-2 rounded-lg border border-kraft-300" /></div>
+        <button onclick="downloadCanvas('flyer-canvas', 'Flyer-DecoMiAlma.png')" class="w-full py-2.5 bg-terracota text-white rounded-xl font-bold">Descargar Flyer (PNG)</button>
+      </div>
+      <div class="md:col-span-7 flex items-center justify-center bg-kraft-100 p-4 rounded-xl">
+        <canvas id="flyer-canvas" width="1080" height="1080" class="w-full max-w-[340px] rounded-lg shadow-lg"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GESTOR DE PROYECTOS E IMÁGENES -->
+  <div id="modal-projects" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Proyectos e Imágenes de Ejemplo</h3>
+        <button onclick="closeModal('modal-projects')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="addProjectFromModal(event)" class="bg-kraft-50 p-4 rounded-xl border border-kraft-200 grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+        <div class="sm:col-span-5"><label class="block text-[11px] font-bold uppercase text-kraft-600 mb-1">Nombre *</label><input id="new-proj-name" required type="text" class="w-full px-3 py-2 rounded-lg border border-kraft-300 bg-white text-xs" /></div>
+        <div class="sm:col-span-4"><label class="block text-[11px] font-bold uppercase text-kraft-600 mb-1">Imagen</label><input id="new-proj-file" type="file" accept="image/*" class="w-full text-xs" /></div>
+        <div class="sm:col-span-3"><button type="submit" class="w-full py-2 rounded-lg bg-kraft-600 text-white text-xs font-bold">+ Agregar</button></div>
+      </form>
+      <div id="projects-manager-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CLASE REGULAR -->
+  <div id="modal-reg-class" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Grupo de Clases Regulares</h3>
+        <button onclick="closeModal('modal-reg-class')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveRegularClassGroup(event)" class="space-y-3 text-sm">
+        <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Nombre / Día Semanal *</label><input id="rc-title" required type="text" placeholder="Ej: Miércoles Tarde • 4 Clases" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300" /></div>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Clases</label><input id="rc-weeks" type="number" value="4" readonly class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-kraft-50" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Cupo</label><input id="rc-capacity" required type="number" value="4" min="1" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Arancel ($)</label><input id="rc-price" required type="number" value="60000" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('modal-reg-class')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-oliva text-white text-xs font-bold">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ALUMNA EN CLASE REGULAR -->
+  <div id="modal-rc-student" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Alumna en Clase Regular</h3>
+        <button onclick="closeModal('modal-rc-student')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveRegularStudent(event)" class="space-y-3 text-sm">
+        <input type="hidden" id="rcs-group-id" /><input type="hidden" id="rcs-student-id" />
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Nombre *</label><input id="rcs-name" required type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">WhatsApp *</label><input id="rcs-phone" required type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Proyecto Principal</label><select id="rcs-main-project" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white capitalize"></select></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Abonado ($)</label><input id="rcs-paid" type="number" value="0" class="w-full px-3 py-2 rounded-xl border border-kraft-300 font-bold text-emerald-700" /></div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-kraft-50 border border-kraft-200 space-y-2">
+          <div class="text-xs font-bold text-kraft-800">Proyecto Extra (suma costo adicional)</div>
+          <div class="grid grid-cols-2 gap-2">
+            <select id="rcs-extra-project" class="px-3 py-1.5 rounded-lg border border-kraft-300 bg-white text-xs capitalize"></select>
+            <input id="rcs-extra-cost" type="number" value="0" placeholder="Costo extra ($)" class="px-3 py-1.5 rounded-lg border border-kraft-300 bg-white text-xs font-bold" />
+          </div>
+        </div>
+        <div class="flex justify-between items-center pt-2">
+          <button type="button" id="btn-rcs-delete" onclick="deleteRegularStudent()" class="hidden px-3.5 py-2 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-bold">Quitar del grupo</button>
+          <div class="flex gap-2 ml-auto">
+            <button type="button" onclick="closeModal('modal-rc-student')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cancelar</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-terracota text-white text-xs font-bold">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CONTACTO NUEVO / EDITAR -->
+  <div id="modal-contact-form" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Ficha de Contacto</h3>
+        <button onclick="closeModal('modal-contact-form')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveContact(event)" class="space-y-3 text-sm">
+        <input type="hidden" id="ct-id" />
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Nombre *</label><input id="ct-name" required type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">WhatsApp *</label><input id="ct-phone" required type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Instagram / Email</label><input id="ct-email" type="text" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div>
+            <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Perfil / Rol *</label>
+            <select id="ct-role" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white">
+              <option value="Alumna">Alumna (Talleres / Clases)</option>
+              <option value="Producto">Interesada en Producto (Ventas)</option>
+              <option value="Ambos">Alumna + Compradora de Productos</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Proyecto de interés / cursado</label><select id="ct-project" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white capitalize"></select></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Producto de interés (Ventas)</label><select id="ct-product" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white"></select></div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Detalle / Talleres hechos o futuros / Notas</label><textarea id="ct-notes" rows="2" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300"></textarea></div>
+        <div class="flex justify-between items-center pt-2">
+          <button type="button" id="btn-ct-delete" onclick="deleteContact()" class="hidden px-3.5 py-2 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-bold">Eliminar</button>
+          <div class="flex gap-2 ml-auto">
+            <button type="button" onclick="closeModal('modal-contact-form')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cancelar</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-terracota text-white text-xs font-bold">Guardar Contacto</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PRODUCTO NUEVO / EDITAR -->
+  <div id="modal-product-form" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Producto de Catálogo</h3>
+        <button onclick="closeModal('modal-product-form')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveProduct(event)" class="space-y-3 text-sm">
+        <input type="hidden" id="pr-id" />
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Nombre del Producto *</label><input id="pr-name" required type="text" placeholder="Ej: Lámpara Capelina 50cm" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Categoría</label><input id="pr-category" type="text" placeholder="Ej: Iluminación / Espejos / Deco" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div class="grid grid-cols-4 gap-2">
+          <div><label class="block text-[11px] font-bold uppercase text-kraft-600 mb-1">Stock *</label><input id="pr-stock" required type="number" min="0" value="1" class="w-full px-2.5 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-[11px] font-bold uppercase text-kraft-600 mb-1">Costo ($)</label><input id="pr-cost" required type="number" min="0" value="0" class="w-full px-2.5 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-[11px] font-bold uppercase text-kraft-600 mb-1">Venta ($)</label><input id="pr-price" required type="number" min="0" value="0" class="w-full px-2.5 py-2 rounded-xl border border-kraft-300 font-bold" /></div>
+          <div><label class="block text-[11px] font-bold uppercase text-kraft-600 mb-1">Vendidos</label><input id="pr-sold" type="number" min="0" value="0" class="w-full px-2.5 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Imagen del Producto</label>
+          <input id="pr-file" type="file" accept="image/*" class="w-full text-xs" />
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('modal-product-form')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-kraft-600 text-white text-xs font-bold">Guardar Producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRAR VENTA DE PRODUCTO -->
+  <div id="modal-sale-form" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Registrar Venta</h3>
+        <button onclick="closeModal('modal-sale-form')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveSale(event)" class="space-y-3 text-sm">
+        <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Producto *</label><select id="sl-product" required onchange="onSelectSaleProduct()" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white"></select></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Cliente *</label><input id="sl-customer" required type="text" placeholder="Nombre compradora" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">WhatsApp</label><input id="sl-phone" type="text" placeholder="351..." class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Cant. *</label><input id="sl-qty" required type="number" min="1" value="1" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Precio u. ($)</label><input id="sl-price" required type="number" class="w-full px-3 py-2 rounded-xl border border-kraft-300 font-bold" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Fecha</label><input id="sl-date" required type="date" class="w-full px-2 py-2 rounded-xl border border-kraft-300 text-xs" /></div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('modal-sale-form')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-oliva text-white text-xs font-bold">Confirmar Venta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: AGREGAR / EDITAR MOVIMIENTO CONTABLE -->
+  <div id="modal-account-entry" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Movimiento Contable</h3>
+        <button onclick="closeModal('modal-account-entry')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="saveAccountEntry(event)" class="space-y-3 text-sm">
+        <input type="hidden" id="ae-id" />
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Tipo *</label>
+            <select id="ae-type" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white">
+              <option value="Gasto">Gasto / Costo</option>
+              <option value="Ingreso">Ingreso</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Rubro *</label>
+            <select id="ae-category" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white">
+              <option value="Materiales y Kraft">Materiales y Kraft</option>
+              <option value="Insumos Break / Merienda">Insumos Break / Merienda</option>
+              <option value="Taller">Taller</option>
+              <option value="Clase Regular">Clase Regular</option>
+              <option value="Venta Producto">Venta Producto</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Detalle / Descripción *</label><input id="ae-desc" required type="text" placeholder="Ej: Rollos papel kraft, café y facturas, etc." class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Taller Asociado</label><select id="ae-workshop" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white text-xs"></select></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Proyecto Asociado</label><select id="ae-project" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white text-xs capitalize"></select></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Monto ($) *</label><input id="ae-amount" required type="number" min="0" class="w-full px-3 py-2 rounded-xl border border-kraft-300 font-bold" /></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Fecha *</label><input id="ae-date" required type="date" class="w-full px-3 py-2 rounded-xl border border-kraft-300" /></div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('modal-account-entry')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-terracota text-white text-xs font-bold">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIGURACIÓN -->
+  <div id="modal-config" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-kraft-200 max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-kraft-100 pb-3">
+        <h3 class="font-serif text-2xl font-bold text-kraft-800">Configuración del Estudio</h3>
+        <button onclick="closeModal('modal-config')" class="text-kraft-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div><label class="block font-bold uppercase text-kraft-600 mb-1">Dirección / Link de Ubicación (Fichas)</label><input id="config-location" type="text" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300" /></div>
+        <div><label class="block font-bold uppercase text-kraft-600 mb-1">Alias Bancario / MercadoPago</label><input id="config-alias" type="text" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300" /></div>
+        <div><label class="block font-bold uppercase text-kraft-600 mb-1">URL Google Apps Script (/exec)</label><input id="config-script-url" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2 rounded-xl border border-kraft-300" /></div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-config')" class="px-4 py-2 rounded-xl border border-kraft-300 text-xs font-semibold">Cerrar</button>
+        <button onclick="saveConfig()" class="px-5 py-2 rounded-xl bg-kraft-600 text-white text-xs font-bold">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== UTILIDADES ====================
+    function escAttr(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function makeProjectSvg(label) {
+      const safe = String(label || 'Proyecto').toUpperCase().replace(/[<>&"]/g, '');
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320"><rect width="320" height="320" rx="24" fill="#F3ECE1"/><rect x="14" y="14" width="292" height="292" rx="18" fill="none" stroke="#C29F75" stroke-width="2" stroke-dasharray="6 4"/><circle cx="160" cy="130" r="54" fill="#E6D8C3" stroke="#7C624A" stroke-width="3"/><text x="160" y="137" font-family="Georgia,serif" font-size="22" fill="#5E4835" text-anchor="middle" font-style="italic">DecoMiAlma</text><text x="160" y="226" font-family="sans-serif" font-size="15" font-weight="bold" fill="#423224" text-anchor="middle">${safe}</text><text x="160" y="250" font-family="sans-serif" font-size="11" fill="#7C624A" text-anchor="middle">EJEMPLO DE PROYECTO</text></svg>`;
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    function compressImageFile(file, callback) {
+      if (!file) return callback(null);
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const max = 360;
+          let w = img.width, h = img.height;
+          if (w > h && w > max) { h = Math.round(h * max / w); w = max; }
+          else if (h > max) { w = Math.round(w * max / h); h = max; }
+          const c = document.createElement('canvas');
+          c.width = w; c.height = h;
+          c.getContext('2d').drawImage(img, 0, 0, w, h);
+          callback(c.toDataURL('image/jpeg', 0.72));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    const formatARS = n => '$' + Number(n || 0).toLocaleString('es-AR');
+    const cleanPhoneNum = p => String(p || '').replace(/\D/g, '');
+    const todayISO = () => new Date().toISOString().slice(0, 10);
+
+    function formatDateHuman(dateStr) {
+      if (!dateStr) return '-';
+      const parts = String(dateStr).split('-');
+      if (parts.length !== 3) return dateStr;
+      const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      return `${parts[2]} de ${months[parseInt(parts[1], 10) - 1] || ''} ${parts[0]}`;
+    }
+
+    // ==================== DATOS BASE ====================
+    const DEFAULT_PROJECTS = [
+      'espejo', 'bandeja circular', 'bandeja rectangular', 'cesto',
+      'servilletero de rollo', 'servilletero cuadrado', 'servilletero media luna',
+      'hojas', 'lampara cónica', 'lampara capelina'
+    ].map((name, i) => ({ id: 'proj-' + (i + 1), name, image: makeProjectSvg(name) }));
+
+    const DEFAULT_WORKSHOPS = [
+      { id: 'ws-1', title: 'Workshop Espejo Kraft', project: 'espejo', date: '2026-11-28', time: '15:30 a 19:30 hs', price: 45000, deposit: 15000, capacity: 8, notes: 'Incluye espejo, papel kraft y merienda.' },
+      { id: 'ws-2', title: 'Taller Lámpara Capelina', project: 'lampara capelina', date: '2026-12-05', time: '15:00 a 19:00 hs', price: 52000, deposit: 18000, capacity: 8, notes: 'Incluye estructura, hilo kraft y merienda.' }
+    ];
+
+    const DEFAULT_REGISTRATIONS = [
+      { id: 'reg-1', workshopId: 'ws-1', name: 'Lucía Fernández', phone: '3516234567', email: '@lucia.deco', project: 'espejo', total: 45000, paid: 15000, notes: 'Señó por transferencia.' },
+      { id: 'reg-2', workshopId: 'ws-1', name: 'Mariana Soria', phone: '3515987654', email: 'marianasoria@gmail.com', project: 'espejo', total: 45000, paid: 45000, notes: 'Pagado total.' }
+    ];
+
+    const DEFAULT_REGULAR_CLASSES = [
+      {
+        id: 'rc-1', title: 'Grupo Jueves • Ciclo 4 Clases', weeks: 4, capacity: 4, price: 60000,
+        students: [
+          { id: 'rcs-1', name: 'Sofía Pereyra', phone: '3514441122', mainProject: 'bandeja circular', extraProject: 'cesto', extraCost: 18000, paid: 40000, attendance: [true, true, false, false] }
+        ]
+      }
+    ];
+
+    const DEFAULT_PRODUCTS = [
+      { id: 'prod-1', name: 'Espejo Sol Kraft 60cm', category: 'Espejos', stock: 3, cost: 16000, price: 42000, sold: 2, image: makeProjectSvg('espejo') },
+      { id: 'prod-2', name: 'Lámpara Capelina Encordada', category: 'Iluminación', stock: 2, cost: 21000, price: 58000, sold: 1, image: makeProjectSvg('lampara capelina') },
+      { id: 'prod-3', name: 'Bandeja Circular Espejada', category: 'Deco Hogar', stock: 4, cost: 11000, price: 32000, sold: 3, image: makeProjectSvg('bandeja circular') }
+    ];
+
+    const DEFAULT_SALES = [
+      { id: 'sale-1', productId: 'prod-1', productName: 'Espejo Sol Kraft 60cm', customer: 'Carolina Allende', phone: '3513456789', qty: 1, unitPrice: 42000, total: 42000, date: '2026-11-16' }
+    ];
+
+    const DEFAULT_ACCOUNTING = [
+      { id: 'ae-1', type: 'Gasto', category: 'Materiales y Kraft', description: 'Bobinas papel kraft + cola vinílica', workshopId: 'ws-1', project: 'espejo', amount: 26000, date: '2026-11-15' },
+      { id: 'ae-2', type: 'Gasto', category: 'Insumos Break / Merienda', description: 'Café, té, facturas y budín', workshopId: 'ws-1', project: 'espejo', amount: 14500, date: '2026-11-17' }
+    ];
+
+    const DEFAULT_CONTACTS = [
+      { id: 'ct-1', name: 'Lucía Fernández', phone: '3516234567', email: '@lucia.deco', role: 'Alumna', project: 'espejo', product: '', notes: 'Alumna frecuente.' },
+      { id: 'ct-2', name: 'Carolina Allende', phone: '3513456789', email: '@caro.allende', role: 'Producto', project: '', product: 'Espejo Sol Kraft 60cm', notes: 'Compró espejo y consultó por lámpara.' }
+    ];
+
+    const DEFAULT_FORM_CONFIG = {
+      title: 'Inscripción a Talleres & Consultas DecoMiAlma',
+      subtitle: 'Elegí tu taller, clase regular o producto artesanal y te contactamos por WhatsApp.',
+      fields: [
+        { id: 'f-1', label: '¿Tenés experiencia previa en encordado o macramé?', type: 'select', options: 'No, sería mi primera vez, Sí, algo de práctica, Ya hice talleres en DecoMiAlma' },
+        { id: 'f-2', label: 'Comentarios o consultas adicionales', type: 'text', options: '' }
+      ]
+    };
+
+    // ==================== ESTADO ====================
+    function loadJSON(key, fallback) {
+      try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+      catch { return fallback; }
+    }
+
+    let projects = loadJSON('dma3_projects', DEFAULT_PROJECTS);
+    let workshops = loadJSON('dma3_workshops', DEFAULT_WORKSHOPS);
+    let registrations = loadJSON('dma3_registrations', DEFAULT_REGISTRATIONS);
+    let regularClasses = loadJSON('dma3_reg_classes', DEFAULT_REGULAR_CLASSES);
+    let contacts = loadJSON('dma3_contacts', DEFAULT_CONTACTS);
+    let products = loadJSON('dma3_products', DEFAULT_PRODUCTS);
+    let sales = loadJSON('dma3_sales', DEFAULT_SALES);
+    let accountingEntries = loadJSON('dma3_accounting', DEFAULT_ACCOUNTING);
+    let credits = loadJSON('dma3_credits', []);
+    let formConfig = loadJSON('dma3_form_config', DEFAULT_FORM_CONFIG);
+    let config = loadJSON('dma3_config', {
+      scriptUrl: '', alias: 'decomialma.mp', location: 'Córdoba Capital • https://maps.google.com/?q=Cordoba+Argentina'
+    });
+
+    let currentCalDate = new Date(2026, 10, 1);
+    let currentDetailWorkshopId = null;
+    let accountingViewMode = 'resumen';
+    let flyerBgImage = null;
+    let isPreviewingForm = false;
+
+    function saveLocal() {
+      localStorage.setItem('dma3_projects', JSON.stringify(projects));
+      localStorage.setItem('dma3_workshops', JSON.stringify(workshops));
+      localStorage.setItem('dma3_registrations', JSON.stringify(registrations));
+      localStorage.setItem('dma3_reg_classes', JSON.stringify(regularClasses));
+      localStorage.setItem('dma3_contacts', JSON.stringify(contacts));
+      localStorage.setItem('dma3_products', JSON.stringify(products));
+      localStorage.setItem('dma3_sales', JSON.stringify(sales));
+      localStorage.setItem('dma3_accounting', JSON.stringify(accountingEntries));
+      localStorage.setItem('dma3_credits', JSON.stringify(credits));
+      localStorage.setItem('dma3_form_config', JSON.stringify(formConfig));
+      localStorage.setItem('dma3_config', JSON.stringify(config));
+    }
+
+    function getProjectImage(name) {
+      const target = String(name || '').trim().toLowerCase();
+      const found = projects.find(p => p.name.trim().toLowerCase() === target);
+      return (found && found.image) ? found.image : makeProjectSvg(name || 'Proyecto');
+    }
+
+    function ensureProjectExists(name, img = null) {
+      const clean = String(name || '').trim();
+      if (!clean) return;
+      const found = projects.find(p => p.name.trim().toLowerCase() === clean.toLowerCase());
+      if (!found) projects.push({ id: 'proj-' + Date.now(), name: clean, image: img || makeProjectSvg(clean) });
+      else if (img) found.image = img;
+      saveLocal();
+    }
+
+    function upsertContactAuto({ name, phone, email, role, project, product, notes }) {
+      const key = cleanPhoneNum(phone);
+      let existing = contacts.find(c =>
+        (key && cleanPhoneNum(c.phone) === key) ||
+        c.name.trim().toLowerCase() === String(name || '').trim().toLowerCase()
+      );
+      if (existing) {
+        if (email && !existing.email) existing.email = email;
+        if (role && existing.role !== role && existing.role !== 'Ambos') existing.role = 'Ambos';
+        if (project) existing.project = project;
+        if (product) existing.product = product;
+        if (notes) existing.notes = existing.notes ? `${existing.notes} | ${notes}` : notes;
+      } else {
+        contacts.unshift({
+          id: 'ct-' + Date.now() + '-' + Math.floor(Math.random() * 999),
+          name: name || 'Sin nombre', phone: phone || '', email: email || '',
+          role: role || 'Alumna', project: project || '', product: product || '', notes: notes || ''
+        });
+      }
+    }
+
+    // ==================== NAVEGACIÓN ====================
+    function switchTab(tab) {
+      ['inicio', 'talleres', 'calendario', 'contactos', 'productos', 'contabilidad'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        const db = document.getElementById(`nav-${t}`);
+        if (db) db.className = t === tab
+          ? 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-kraft-600 text-white shadow-sm'
+          : 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all text-kraft-700 hover:bg-kraft-100';
+        const mb = document.getElementById(`mnav-${t}`);
+        if (mb) mb.className = t === tab
+          ? 'flex flex-col items-center py-1 text-kraft-700 font-bold'
+          : 'flex flex-col items-center py-1 text-kraft-400';
+      });
+      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      renderAll();
+    }
+
+    // ==================== CONTABILIDAD UNIFICADA ====================
+    function buildUnifiedAccountingRows() {
+      const rows = [];
+      registrations.forEach(r => {
+        const ws = workshops.find(w => w.id === r.workshopId);
+        if (Number(r.paid || 0) > 0) {
+          rows.push({
+            id: 'auto-reg-' + r.id, editable: false, date: ws?.date || todayISO(),
+            type: 'Ingreso', category: 'Taller', description: `Inscripción: ${r.name}`,
+            workshopId: r.workshopId, workshopTitle: ws?.title || 'Taller',
+            project: r.project || ws?.project || '', amount: Number(r.paid || 0)
+          });
+        }
+      });
+      regularClasses.forEach(g => {
+        (g.students || []).forEach(s => {
+          if (Number(s.paid || 0) > 0) {
+            rows.push({
+              id: 'auto-rc-' + s.id, editable: false, date: todayISO(),
+              type: 'Ingreso', category: 'Clase Regular', description: `Clase Regular: ${s.name}`,
+              workshopId: '', workshopTitle: g.title,
+              project: s.mainProject + (s.extraProject ? ' + ' + s.extraProject : ''), amount: Number(s.paid || 0)
+            });
+          }
+        });
+      });
+      sales.forEach(s => {
+        rows.push({
+          id: 'auto-sale-' + s.id, editable: false, date: s.date || todayISO(),
+          type: 'Ingreso', category: 'Venta Producto', description: `Venta (${s.qty}u): ${s.productName} - ${s.customer}`,
+          workshopId: '', workshopTitle: 'Ventas Productos', project: s.productName, amount: Number(s.total || 0)
+        });
+      });
+      accountingEntries.forEach(e => {
+        const ws = workshops.find(w => w.id === e.workshopId);
+        rows.push({
+          id: e.id, editable: true, date: e.date || todayISO(),
+          type: e.type, category: e.category, description: e.description,
+          workshopId: e.workshopId || '', workshopTitle: ws ? ws.title : (e.workshopId ? e.workshopId : 'General'),
+          project: e.project || '', amount: Number(e.amount || 0)
+        });
+      });
+      return rows.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    }
+
+    function computeFinanceTotals() {
+      const rows = buildUnifiedAccountingRows();
+      const totalIncome = rows.filter(r => r.type === 'Ingreso').reduce((a, b) => a + b.amount, 0);
+      const totalExpenses = rows.filter(r => r.type === 'Gasto').reduce((a, b) => a + b.amount, 0);
+
+      const wsPending = registrations.reduce((a, r) => a + Math.max(0, Number(r.total || 0) - Number(r.paid || 0)), 0);
+      let rcPending = 0;
+      regularClasses.forEach(g => (g.students || []).forEach(s => {
+        rcPending += Math.max(0, (Number(g.price || 0) + Number(s.extraCost || 0)) - Number(s.paid || 0));
+      }));
+      const activeCredits = credits.filter(c => c.status === 'Disponible').reduce((a, c) => a + Number(c.amount || 0), 0);
+
+      return { totalIncome, totalExpenses, net: totalIncome - totalExpenses, totalPending: wsPending + rcPending, activeCredits };
+    }
+
+    // ==================== RENDERIZADO GENERAL ====================
+    function renderAll() {
+      renderDashboard();
+      renderWorkshops();
+      renderCalendar();
+      renderContacts();
+      renderProducts();
+      renderAccounting();
+      updateSyncBadge();
+      lucide.createIcons();
+    }
+
+    function renderDashboard() {
+      const sortedWs = [...workshops].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+      const nextWs = sortedWs[0];
+      document.getElementById('kpi-next-title').textContent = nextWs ? nextWs.title : 'Sin talleres';
+      document.getElementById('kpi-next-date').textContent = nextWs ? `${formatDateHuman(nextWs.date)} • ${nextWs.time}` : '-';
+
+      const fin = computeFinanceTotals();
+      const availCreds = credits.filter(c => c.status === 'Disponible').length;
+      document.getElementById('kpi-total-students').textContent = registrations.length;
+      document.getElementById('kpi-credits-count').textContent = `${availCreds} crédito(s) por reubicar`;
+      document.getElementById('kpi-collected').textContent = formatARS(fin.totalIncome);
+      document.getElementById('kpi-pending').textContent = formatARS(fin.totalPending);
+
+      renderRegularClasses();
+
+      const pendingRegs = registrations.filter(r => Number(r.paid) < Number(r.total));
+      document.getElementById('badge-pending-count').textContent = pendingRegs.length;
+      document.getElementById('dashboard-pending-list').innerHTML = pendingRegs.length === 0
+        ? `<div class="py-8 text-center text-xs text-kraft-500">Sin saldos pendientes en talleres.</div>`
+        : pendingRegs.map(r => {
+            const ws = workshops.find(w => w.id === r.workshopId);
+            const saldo = Math.max(0, Number(r.total) - Number(r.paid));
+            return `
+              <div class="py-3 flex items-center justify-between gap-2">
+                <div>
+                  <div class="font-bold text-sm text-kraft-800 flex items-center gap-1.5">
+                    ${escAttr(r.name)}
+                    <span class="px-2 py-0.5 text-[10px] rounded-full font-bold ${Number(r.paid) === 0 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-800'}">
+                      ${Number(r.paid) === 0 ? 'Falta Seña' : 'Saldo: ' + formatARS(saldo)}
+                    </span>
+                  </div>
+                  <div class="text-xs text-kraft-500 capitalize">${escAttr(ws?.title || 'Taller')} • ${escAttr(r.project || '')}</div>
+                </div>
+                <div class="flex gap-1.5">
+                  <button onclick="openFichaModal('${r.id}')" class="px-2.5 py-1.5 rounded-lg bg-kraft-100 hover:bg-kraft-200 text-kraft-800 text-xs font-bold">Ficha</button>
+                  <button onclick="sendFichaWhatsAppText('${r.id}')" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold">WA</button>
+                </div>
+              </div>`;
+          }).join('');
+
+      document.getElementById('dashboard-workshops-list').innerHTML = sortedWs.slice(0, 4).map(ws => {
+        const enrolled = registrations.filter(r => r.workshopId === ws.id);
+        const pct = Math.min(100, Math.round((enrolled.length / Math.max(1, ws.capacity)) * 100));
+        return `
+          <div onclick="openWorkshopDetail('${ws.id}')" class="cursor-pointer group p-4 rounded-xl border border-kraft-200 bg-kraft-50/60 hover:bg-white hover:shadow-md transition flex flex-col justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="${getProjectImage(ws.project)}" class="w-12 h-12 rounded-lg object-cover border border-kraft-200 bg-white shrink-0" />
+              <div class="min-w-0">
+                <div class="text-[11px] font-bold uppercase text-terracota truncate capitalize">${escAttr(ws.project)}</div>
+                <h3 class="font-serif text-lg font-bold text-kraft-800 group-hover:text-terracota truncate">${escAttr(ws.title)}</h3>
+                <p class="text-xs text-kraft-600">${formatDateHuman(ws.date)} • ${formatARS(ws.price)}</p>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1"><span>Cupos: ${enrolled.length}/${ws.capacity}</span><span>${Math.max(0, ws.capacity - enrolled.length)} libres</span></div>
+              <div class="w-full h-1.5 bg-kraft-200 rounded-full overflow-hidden"><div class="h-full bg-kraft-600" style="width:${pct}%"></div></div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ==================== CLASES REGULARES ====================
+    function renderRegularClasses() {
+      const c = document.getElementById('regular-classes-container');
+      if (!regularClasses.length) {
+        c.innerHTML = `<div class="p-6 text-center text-xs text-kraft-500 bg-kraft-50 rounded-xl">Sin grupos de clases regulares aún.</div>`;
+        return;
+      }
+      c.innerHTML = regularClasses.map(g => {
+        const students = g.students || [];
+        return `
+          <div class="border border-kraft-200 rounded-2xl p-4 bg-kraft-50/50 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="font-serif text-xl font-bold text-kraft-900">${escAttr(g.title)}</h3>
+                <p class="text-xs text-kraft-600">Ciclo: <strong>${g.weeks} clases (1x semana)</strong> • Cupo: <strong>${students.length}/${g.capacity}</strong> • Arancel base: <strong>${formatARS(g.price)}</strong></p>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="openRegStudentModal('${g.id}')" class="px-3 py-1.5 rounded-xl bg-oliva text-white text-xs font-bold flex items-center gap-1"><i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Sumar Alumna</button>
+                <button onclick="deleteRegularClass('${g.id}')" class="p-1.5 rounded-lg text-kraft-500 hover:bg-red-50 hover:text-red-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs bg-white rounded-xl overflow-hidden border border-kraft-200">
+                <thead>
+                  <tr class="bg-kraft-100 text-kraft-700 uppercase text-[10px]">
+                    <th class="p-2.5">Alumna / Proyectos</th>
+                    <th class="p-2.5 text-center">Cl.1</th><th class="p-2.5 text-center">Cl.2</th><th class="p-2.5 text-center">Cl.3</th><th class="p-2.5 text-center">Cl.4</th>
+                    <th class="p-2.5 text-right">Total / Saldo</th><th class="p-2.5 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-kraft-100">
+                  ${students.map(s => {
+                    const tot = Number(g.price || 0) + Number(s.extraCost || 0);
+                    const saldo = Math.max(0, tot - Number(s.paid || 0));
+                    const att = s.attendance || [false, false, false, false];
+                    return `
+                      <tr>
+                        <td class="p-2.5">
+                          <div class="font-bold text-kraft-900">${escAttr(s.name)}</div>
+                          <div class="text-[11px] text-kraft-600 capitalize">${escAttr(s.mainProject)}${s.extraProject ? ` + <strong>${escAttr(s.extraProject)}</strong> (${formatARS(s.extraCost)})` : ''}</div>
+                        </td>
+                        ${[0, 1, 2, 3].map(i => `<td class="p-2.5 text-center"><input type="checkbox" ${att[i] ? 'checked' : ''} onchange="toggleAttendance('${g.id}','${s.id}',${i})" class="w-4 h-4 accent-oliva cursor-pointer" /></td>`).join('')}
+                        <td class="p-2.5 text-right">
+                          <div class="font-bold">${formatARS(tot)}</div>
+                          <div class="text-[11px] ${saldo > 0 ? 'text-amber-700 font-semibold' : 'text-emerald-700'}">${saldo > 0 ? 'Debe ' + formatARS(saldo) : 'Al día'}</div>
+                        </td>
+                        <td class="p-2.5 text-right"><button onclick="openRegStudentModal('${g.id}','${s.id}')" class="px-2.5 py-1 rounded-lg bg-kraft-100 hover:bg-kraft-200 font-bold text-[11px]">Editar / Extra</button></td>
+                      </tr>`;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function openRegClassModal() {
+      document.getElementById('rc-title').value = '';
+      document.getElementById('rc-capacity').value = 4;
+      document.getElementById('rc-price').value = 60000;
+      openModal('modal-reg-class');
+    }
+    function saveRegularClassGroup(e) {
+      e.preventDefault();
+      regularClasses.push({
+        id: 'rc-' + Date.now(), title: document.getElementById('rc-title').value.trim(),
+        weeks: 4, capacity: Number(document.getElementById('rc-capacity').value),
+        price: Number(document.getElementById('rc-price').value), students: []
+      });
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-reg-class'); renderAll();
+    }
+    function deleteRegularClass(id) {
+      if (!confirm('¿Eliminar este grupo de clases regulares?')) return;
+      regularClasses = regularClasses.filter(g => g.id !== id);
+      saveLocal(); syncFullStateToCloud(); renderAll();
+    }
+    function openRegStudentModal(groupId, studentId = null) {
+      const g = regularClasses.find(x => x.id === groupId);
+      const stu = (g?.students || []).find(s => s.id === studentId);
+      const opts = projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('');
+      document.getElementById('rcs-main-project').innerHTML = opts;
+      document.getElementById('rcs-extra-project').innerHTML = `<option value="">-- Sin proyecto extra --</option>` + opts;
+      document.getElementById('rcs-group-id').value = groupId;
+      document.getElementById('rcs-student-id').value = stu?.id || '';
+      document.getElementById('rcs-name').value = stu?.name || '';
+      document.getElementById('rcs-phone').value = stu?.phone || '';
+      document.getElementById('rcs-main-project').value = stu?.mainProject || projects[0]?.name || 'espejo';
+      document.getElementById('rcs-extra-project').value = stu?.extraProject || '';
+      document.getElementById('rcs-extra-cost').value = stu?.extraCost || 0;
+      document.getElementById('rcs-paid').value = stu?.paid || 0;
+      document.getElementById('btn-rcs-delete').classList.toggle('hidden', !stu);
+      openModal('modal-rc-student');
+    }
+    function saveRegularStudent(e) {
+      e.preventDefault();
+      const g = regularClasses.find(x => x.id === document.getElementById('rcs-group-id').value);
+      if (!g) return;
+      const stuId = document.getElementById('rcs-student-id').value;
+      const extraProj = document.getElementById('rcs-extra-project').value;
+      const obj = {
+        id: stuId || ('rcs-' + Date.now()),
+        name: document.getElementById('rcs-name').value.trim(),
+        phone: document.getElementById('rcs-phone').value.trim(),
+        mainProject: document.getElementById('rcs-main-project').value,
+        extraProject: extraProj,
+        extraCost: extraProj ? Number(document.getElementById('rcs-extra-cost').value || 0) : 0,
+        paid: Number(document.getElementById('rcs-paid').value || 0),
+        attendance: stuId ? (g.students.find(s => s.id === stuId)?.attendance || [false, false, false, false]) : [false, false, false, false]
+      };
+      g.students = g.students || [];
+      const idx = g.students.findIndex(s => s.id === obj.id);
+      if (idx >= 0) g.students[idx] = obj; else g.students.push(obj);
+      if (g.students.length > g.capacity) g.capacity = g.students.length;
+      upsertContactAuto({ name: obj.name, phone: obj.phone, role: 'Alumna', project: obj.mainProject, notes: `Clase Regular: ${g.title}` });
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-rc-student'); renderAll();
+    }
+    function deleteRegularStudent() {
+      const gid = document.getElementById('rcs-group-id').value;
+      const sid = document.getElementById('rcs-student-id').value;
+      if (!confirm('¿Quitar esta alumna del grupo regular?')) return;
+      const g = regularClasses.find(x => x.id === gid);
+      if (g) g.students = (g.students || []).filter(s => s.id !== sid);
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-rc-student'); renderAll();
+    }
+    function toggleAttendance(groupId, studentId, idx) {
+      const s = regularClasses.find(g => g.id === groupId)?.students?.find(x => x.id === studentId);
+      if (!s) return;
+      s.attendance = s.attendance || [false, false, false, false];
+      s.attendance[idx] = !s.attendance[idx];
+      saveLocal(); syncFullStateToCloud(); renderAll();
+    }
+
+    // ==================== TALLERES, PROYECTOS & FLYERS ====================
+    function renderWorkshops() {
+      document.getElementById('workshops-grid').innerHTML = workshops.map(ws => {
+        const enrolled = registrations.filter(r => r.workshopId === ws.id);
+        const collected = enrolled.reduce((a, r) => a + Number(r.paid || 0), 0);
+        const pct = Math.min(100, Math.round((enrolled.length / Math.max(1, ws.capacity)) * 100));
+        return `
+          <div class="bg-white rounded-2xl border border-kraft-200 shadow-sm overflow-hidden flex flex-col justify-between">
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-3">
+                  <img src="${getProjectImage(ws.project)}" class="w-12 h-12 rounded-xl object-cover border border-kraft-200 bg-kraft-50 shrink-0" />
+                  <div>
+                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-kraft-100 text-kraft-700 capitalize">${escAttr(ws.project)}</span>
+                    <h3 onclick="openWorkshopDetail('${ws.id}')" class="cursor-pointer font-serif text-2xl font-bold text-kraft-800 hover:text-terracota mt-0.5">${escAttr(ws.title)}</h3>
+                  </div>
+                </div>
+                <div class="flex gap-1">
+                  <button onclick="openFlyerModal('${ws.id}')" title="Flyer" class="p-1.5 rounded-lg text-kraft-600 hover:bg-kraft-100"><i data-lucide="instagram" class="w-4 h-4"></i></button>
+                  <button onclick="openWorkshopModal('${ws.id}')" title="Editar" class="p-1.5 rounded-lg text-kraft-600 hover:bg-kraft-100"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                  <button onclick="deleteWorkshop('${ws.id}')" title="Eliminar" class="p-1.5 rounded-lg text-red-600 hover:bg-red-50"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </div>
+              </div>
+              <div class="text-xs text-kraft-600 mt-3 space-y-1">
+                <div>📅 ${formatDateHuman(ws.date)} (${escAttr(ws.time)})</div>
+                <div>🏷️ Tarifa: <strong>${formatARS(ws.price)}</strong> • Seña: <strong>${formatARS(ws.deposit)}</strong></div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-kraft-100">
+                <div class="flex justify-between text-xs font-bold text-kraft-700 mb-1"><span>Inscriptas (${enrolled.length}/${ws.capacity})</span><span>Cobrado: ${formatARS(collected)}</span></div>
+                <div class="w-full h-2 bg-kraft-100 rounded-full overflow-hidden"><div class="h-full bg-terracota" style="width:${pct}%"></div></div>
+              </div>
+            </div>
+            <div class="px-5 py-3 bg-kraft-50 border-t border-kraft-100 flex justify-between">
+              <button onclick="openWorkshopDetail('${ws.id}')" class="text-xs font-bold text-kraft-800 hover:text-terracota">Ver Inscriptas (${enrolled.length})</button>
+              <button onclick="openRegistrationModal(null, '${ws.id}')" class="text-xs font-bold text-terracota hover:underline">+ Inscribir</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function openWorkshopModal(wsId = null) {
+      const ws = workshops.find(w => w.id === wsId);
+      const sel = document.getElementById('ws-project');
+      sel.innerHTML = projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('');
+      document.getElementById('ws-id').value = ws?.id || '';
+      document.getElementById('ws-title').value = ws?.title || '';
+      sel.value = ws?.project || projects[0]?.name || 'espejo';
+      document.getElementById('ws-date').value = ws?.date || todayISO();
+      document.getElementById('ws-time').value = ws?.time || '15:30 a 19:30 hs';
+      document.getElementById('ws-capacity').value = ws?.capacity || 8;
+      document.getElementById('ws-price').value = ws?.price || 45000;
+      document.getElementById('ws-deposit').value = ws?.deposit || 15000;
+      document.getElementById('ws-notes').value = ws?.notes || '';
+      document.getElementById('inline-new-project-box').classList.add('hidden');
+      previewSelectedProjectInWorkshop();
+      openModal('modal-workshop-form');
+    }
+    function toggleInlineNewProject() { document.getElementById('inline-new-project-box').classList.toggle('hidden'); }
+    function previewSelectedProjectInWorkshop() { document.getElementById('ws-proj-preview').src = getProjectImage(document.getElementById('ws-project').value); }
+    function addProjectInline() {
+      const name = document.getElementById('inline-proj-name').value.trim();
+      if (!name) return;
+      compressImageFile(document.getElementById('inline-proj-file').files[0], img => {
+        ensureProjectExists(name, img);
+        const sel = document.getElementById('ws-project');
+        sel.innerHTML = projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('');
+        sel.value = name;
+        previewSelectedProjectInWorkshop();
+        document.getElementById('inline-proj-name').value = '';
+        document.getElementById('inline-proj-file').value = '';
+        document.getElementById('inline-new-project-box').classList.add('hidden');
+        syncFullStateToCloud();
+      });
+    }
+    function saveWorkshop(e) {
+      e.preventDefault();
+      const id = document.getElementById('ws-id').value || ('ws-' + Date.now());
+      const obj = {
+        id, title: document.getElementById('ws-title').value.trim(),
+        project: document.getElementById('ws-project').value,
+        date: document.getElementById('ws-date').value, time: document.getElementById('ws-time').value.trim(),
+        capacity: Number(document.getElementById('ws-capacity').value),
+        price: Number(document.getElementById('ws-price').value),
+        deposit: Number(document.getElementById('ws-deposit').value),
+        notes: document.getElementById('ws-notes').value.trim()
+      };
+      const idx = workshops.findIndex(w => w.id === id);
+      if (idx >= 0) workshops[idx] = obj; else workshops.push(obj);
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-workshop-form'); renderAll();
+    }
+    function deleteWorkshop(wsId) {
+      if (!confirm('¿Eliminar este taller y sus inscripciones?')) return;
+      workshops = workshops.filter(w => w.id !== wsId);
+      registrations = registrations.filter(r => r.workshopId !== wsId);
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-workshop-detail'); renderAll();
+    }
+
+    function openWorkshopDetail(wsId) {
+      currentDetailWorkshopId = wsId;
+      const ws = workshops.find(w => w.id === wsId);
+      if (!ws) return;
+      const enrolled = registrations.filter(r => r.workshopId === wsId);
+      const collected = enrolled.reduce((a, r) => a + Number(r.paid || 0), 0);
+      const pending = enrolled.reduce((a, r) => a + Math.max(0, Number(r.total || 0) - Number(r.paid || 0)), 0);
+
+      document.getElementById('detail-project-img').src = getProjectImage(ws.project);
+      document.getElementById('detail-project-badge').textContent = 'Proyecto: ' + ws.project;
+      document.getElementById('detail-title').textContent = ws.title;
+      document.getElementById('detail-meta').textContent = `${formatDateHuman(ws.date)} • ${ws.time} • Cupos: ${enrolled.length}/${ws.capacity}`;
+      document.getElementById('detail-price').textContent = formatARS(ws.price);
+      document.getElementById('detail-deposit').textContent = formatARS(ws.deposit);
+      document.getElementById('detail-collected').textContent = formatARS(collected);
+      document.getElementById('detail-pending').textContent = formatARS(pending);
+      document.getElementById('btn-detail-flyer').onclick = () => openFlyerModal(ws.id);
+      document.getElementById('btn-detail-add-student').onclick = () => openRegistrationModal(null, ws.id);
+
+      document.getElementById('detail-students-list').innerHTML = !enrolled.length
+        ? `<div class="p-8 text-center bg-kraft-50 rounded-xl text-sm text-kraft-500">Sin inscriptas todavía.</div>`
+        : enrolled.map(r => {
+            const saldo = Math.max(0, Number(r.total) - Number(r.paid));
+            return `
+              <div class="p-4 rounded-xl border border-kraft-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <img src="${getProjectImage(r.project || ws.project)}" class="w-12 h-12 rounded-lg object-cover border border-kraft-200 shrink-0" />
+                  <div>
+                    <div class="font-bold text-kraft-900">${escAttr(r.name)} <span class="ml-1 px-2 py-0.5 rounded-full text-[10px] ${saldo === 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${saldo === 0 ? 'Pagado' : 'Saldo: ' + formatARS(saldo)}</span></div>
+                    <div class="text-xs text-kraft-600 capitalize">Proyecto: <strong>${escAttr(r.project || ws.project)}</strong> • Abonó: ${formatARS(r.paid)}</div>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  <button onclick="openFichaModal('${r.id}')" class="px-3 py-1.5 rounded-lg bg-kraft-100 hover:bg-kraft-200 text-xs font-bold">Ficha</button>
+                  <button onclick="openRegistrationModal('${r.id}')" class="px-3 py-1.5 rounded-lg border border-kraft-300 text-xs font-bold">Editar</button>
+                  <button onclick="unenrollStudent('${r.id}')" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-700 border border-red-200 text-xs font-bold">Desinscribir</button>
+                </div>
+              </div>`;
+          }).join('');
+      openModal('modal-workshop-detail');
+      lucide.createIcons();
+    }
+
+    // ==================== INSCRIPCIONES, FICHA Y DESINSCRIBIR ====================
+    function reubicarCredito(creditId) {
+      const cr = credits.find(c => c.id === creditId);
+      if (cr) openRegistrationModal(null, null, cr);
+    }
+
+    function openRegistrationModal(regId = null, preWsId = null, creditObj = null) {
+      const wsSel = document.getElementById('reg-workshop');
+      wsSel.innerHTML = workshops.map(w => `<option value="${w.id}">${escAttr(w.title)} (${formatDateHuman(w.date)})</option>`).join('');
+      const pSel = document.getElementById('reg-project');
+      pSel.innerHTML = projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('');
+
+      const reg = registrations.find(r => r.id === regId);
+      document.getElementById('reg-id').value = reg?.id || '';
+      document.getElementById('reg-credit-id').value = creditObj?.id || '';
+      wsSel.value = reg ? reg.workshopId : (preWsId || workshops[0]?.id || '');
+      const ws = workshops.find(w => w.id === wsSel.value);
+
+      document.getElementById('reg-name').value = reg ? reg.name : (creditObj?.name || '');
+      document.getElementById('reg-phone').value = reg ? reg.phone : (creditObj?.phone || '');
+      document.getElementById('reg-email').value = reg ? (reg.email || '') : (creditObj?.email || '');
+      pSel.value = reg ? (reg.project || ws?.project || 'espejo') : (ws?.project || projects[0]?.name || 'espejo');
+      document.getElementById('reg-notes').value = reg ? (reg.notes || '') : (creditObj ? `Reubicada con crédito de ${formatARS(creditObj.amount)} (${creditObj.fromWorkshopTitle})` : '');
+      document.getElementById('reg-total').value = reg ? reg.total : (ws?.price || 45000);
+      document.getElementById('reg-paid').value = reg ? reg.paid : (creditObj ? creditObj.amount : (ws?.deposit || 15000));
+      document.getElementById('btn-reg-unenroll').classList.toggle('hidden', !reg);
+      previewRegProjectImage();
+      openModal('modal-registration-form');
+    }
+
+    function onSelectWorkshopForReg() {
+      const ws = workshops.find(w => w.id === document.getElementById('reg-workshop').value);
+      if (ws && !document.getElementById('reg-id').value) {
+        document.getElementById('reg-total').value = ws.price;
+        if (!document.getElementById('reg-credit-id').value) document.getElementById('reg-paid').value = ws.deposit;
+        document.getElementById('reg-project').value = ws.project;
+        previewRegProjectImage();
+      }
+    }
+
+    function previewRegProjectImage() {
+      const p = document.getElementById('reg-project').value;
+      document.getElementById('reg-proj-img').src = getProjectImage(p);
+      document.getElementById('reg-proj-label').textContent = p;
+    }
+
+    function saveRegistration(e) {
+      e.preventDefault();
+      const id = document.getElementById('reg-id').value || ('reg-' + Date.now());
+      const creditId = document.getElementById('reg-credit-id').value;
+      const obj = {
+        id, workshopId: document.getElementById('reg-workshop').value,
+        name: document.getElementById('reg-name').value.trim(),
+        phone: document.getElementById('reg-phone').value.trim(),
+        email: document.getElementById('reg-email').value.trim(),
+        project: document.getElementById('reg-project').value,
+        total: Number(document.getElementById('reg-total').value),
+        paid: Number(document.getElementById('reg-paid').value),
+        notes: document.getElementById('reg-notes').value.trim()
+      };
+      const idx = registrations.findIndex(r => r.id === id);
+      if (idx >= 0) registrations[idx] = obj; else registrations.push(obj);
+      if (creditId) { const c = credits.find(x => x.id === creditId); if (c) c.status = 'Reubicada'; }
+      upsertContactAuto({ name: obj.name, phone: obj.phone, email: obj.email, role: 'Alumna', project: obj.project });
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-registration-form');
+      if (currentDetailWorkshopId) openWorkshopDetail(currentDetailWorkshopId);
+      renderAll();
+    }
+
+    function unenrollFromForm() {
+      const id = document.getElementById('reg-id').value;
+      if (id) { closeModal('modal-registration-form'); unenrollStudent(id); }
+    }
+
+    function unenrollStudent(regId) {
+      const r = registrations.find(x => x.id === regId);
+      if (!r) return;
+      const ws = workshops.find(w => w.id === r.workshopId);
+      const paid = Number(r.paid || 0);
+      if (!confirm(paid > 0
+        ? `¿Desinscribir a ${r.name}? Los ${formatARS(paid)} quedarán como crédito pendiente en Contactos y Detalles para reubicarla.`
+        : `¿Desinscribir a ${r.name}?`)) return;
+      if (paid > 0) {
+        credits.push({
+          id: 'cred-' + Date.now(), name: r.name, phone: r.phone, email: r.email || '',
+          amount: paid, fromWorkshopTitle: ws?.title || 'Taller anterior', date: todayISO(), status: 'Disponible'
+        });
+        upsertContactAuto({ name: r.name, phone: r.phone, email: r.email, role: 'Alumna', notes: `Crédito ${formatARS(paid)} por desinscripción` });
+      }
+      registrations = registrations.filter(x => x.id !== regId);
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-ficha');
+      if (currentDetailWorkshopId) openWorkshopDetail(currentDetailWorkshopId);
+      renderAll();
+    }
+
+    function buildFichaWhatsAppText(r) {
+      const ws = workshops.find(w => w.id === r.workshopId) || { title: 'Taller DecoMiAlma', date: '', time: '', project: '' };
+      const saldo = Math.max(0, Number(r.total || 0) - Number(r.paid || 0));
+      return [
+        `*FICHA OFICIAL DE INSCRIPCIÓN - DecoMiAlma*`,
+        `• *Alumna:* ${r.name}`,
+        `• *Taller:* ${ws.title}`,
+        `• *Proyecto elegido:* ${r.project || ws.project || 'A definir'}`,
+        `• *Fecha y horario:* ${formatDateHuman(ws.date)} • ${ws.time}`,
+        `• *Tarifa total:* ${formatARS(r.total)}`,
+        `• *Abonado / Seña:* ${formatARS(r.paid)}`,
+        `• *Saldo pendiente:* ${saldo === 0 ? 'Pagado ($0)' : formatARS(saldo)}`,
+        `• *Dirección / Ubicación:* ${config.location}`,
+        ``,
+        `Te espero para compartir una tarde hermosa de creación!`,
+        `Abrazo Jime 🤎`
+      ].join('\n');
+    }
+
+    function openFichaModal(regId) {
+      const r = registrations.find(x => x.id === regId);
+      if (!r) return;
+      const ws = workshops.find(w => w.id === r.workshopId) || { title: 'Taller', date: '', time: '', project: 'espejo' };
+      const saldo = Math.max(0, Number(r.total || 0) - Number(r.paid || 0));
+      document.getElementById('ficha-img').src = getProjectImage(r.project || ws.project);
+      document.getElementById('ficha-workshop').textContent = ws.title;
+      document.getElementById('ficha-student').textContent = `${r.name} • ${r.phone}`;
+      document.getElementById('ficha-project').textContent = `Proyecto: ${r.project || ws.project}`;
+      document.getElementById('ficha-total').textContent = formatARS(r.total);
+      document.getElementById('ficha-paid').textContent = formatARS(r.paid);
+      document.getElementById('ficha-saldo').textContent = saldo === 0 ? '$0' : formatARS(saldo);
+      document.getElementById('ficha-datetime').textContent = `${formatDateHuman(ws.date)} • ${ws.time}`;
+      document.getElementById('ficha-location').textContent = config.location;
+      document.getElementById('ficha-wa-preview').value = buildFichaWhatsAppText(r);
+      document.getElementById('btn-ficha-send-wa').onclick = () => sendFichaWhatsAppText(r.id);
+      document.getElementById('btn-ficha-unenroll').onclick = () => unenrollStudent(r.id);
+      openModal('modal-ficha');
+      lucide.createIcons();
+    }
+
+    function sendFichaWhatsAppText(regId) {
+      const r = registrations.find(x => x.id === regId);
+      if (!r) return;
+      window.open(`https://wa.me/549${cleanPhoneNum(r.phone)}?text=${encodeURIComponent(buildFichaWhatsAppText(r))}`, '_blank');
+    }
+
+    // ==================== FLYER INSTAGRAM & GESTOR PROYECTOS ====================
+    function openFlyerModal(wsId) {
+      const ws = workshops.find(w => w.id === wsId) || workshops[0];
+      document.getElementById('flyer-title').value = ws ? ws.title : 'Workshop DecoMiAlma';
+      document.getElementById('flyer-subtitle').value = ws ? `${formatDateHuman(ws.date)} • ${ws.time}` : '';
+      drawFlyer();
+      openModal('modal-flyer');
+    }
+    function handleFlyerImage(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => { const img = new Image(); img.onload = () => { flyerBgImage = img; drawFlyer(); }; img.src = ev.target.result; };
+      reader.readAsDataURL(file);
+    }
+    function drawFlyer() {
+      const canvas = document.getElementById('flyer-canvas'), ctx = canvas.getContext('2d');
+      if (flyerBgImage) {
+        const sc = Math.max(1080 / flyerBgImage.width, 1080 / flyerBgImage.height);
+        ctx.drawImage(flyerBgImage, 540 - flyerBgImage.width * sc / 2, 540 - flyerBgImage.height * sc / 2, flyerBgImage.width * sc, flyerBgImage.height * sc);
+        ctx.fillStyle = 'rgba(43,32,23,0.35)'; ctx.fillRect(0, 0, 1080, 1080);
+      } else {
+        const g = ctx.createLinearGradient(0, 0, 1080, 1080); g.addColorStop(0, '#D5BE9E'); g.addColorStop(1, '#7C624A');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, 1080, 1080);
+      }
+      ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 3; ctx.strokeRect(50, 50, 980, 980);
+      ctx.textAlign = 'center'; ctx.fillStyle = '#FFF';
+      ctx.font = '400 96px "Cormorant Garamond",serif'; ctx.fillText(document.getElementById('flyer-title').value, 540, 440);
+      ctx.font = '600 32px "Plus Jakarta Sans",sans-serif'; ctx.fillText(document.getElementById('flyer-subtitle').value.toUpperCase(), 540, 535);
+      ctx.font = '400 26px "Plus Jakarta Sans",sans-serif'; ctx.fillText(document.getElementById('flyer-footer').value, 540, 610);
+      ctx.font = '500 78px "Cormorant Garamond",serif'; ctx.fillText('DecoMiAlma', 540, 865);
+      ctx.font = '400 18px "Plus Jakarta Sans",sans-serif'; ctx.fillText('L U Z   Y   A M O R   E N   T U   H O G A R', 540, 905);
+    }
+    function downloadCanvas(id, file) {
+      const a = document.createElement('a'); a.download = file; a.href = document.getElementById(id).toDataURL('image/png'); a.click();
+    }
+
+    function openProjectManagerModal() { renderProjectsManagerList(); openModal('modal-projects'); }
+    function renderProjectsManagerList() {
+      document.getElementById('projects-manager-list').innerHTML = projects.map(p => `
+        <div class="p-3 rounded-xl border border-kraft-200 bg-kraft-50/50 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-3 min-w-0">
+            <img src="${p.image || makeProjectSvg(p.name)}" class="w-12 h-12 rounded-lg object-cover border border-kraft-200 bg-white shrink-0" />
+            <div class="font-bold text-xs text-kraft-900 capitalize truncate">${escAttr(p.name)}</div>
+          </div>
+          <label class="cursor-pointer px-2.5 py-1.5 rounded-lg bg-white border border-kraft-300 text-[11px] font-bold">Foto<input type="file" accept="image/*" class="hidden" onchange="updateSingleProjectImage('${p.id}',event)" /></label>
+        </div>`).join('');
+    }
+    function updateSingleProjectImage(id, ev) {
+      compressImageFile(ev.target.files[0], img => {
+        const p = projects.find(x => x.id === id);
+        if (p && img) { p.image = img; saveLocal(); syncFullStateToCloud(); renderProjectsManagerList(); renderAll(); }
+      });
+    }
+    function addProjectFromModal(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-proj-name').value.trim();
+      compressImageFile(document.getElementById('new-proj-file').files[0], img => {
+        ensureProjectExists(name, img);
+        document.getElementById('new-proj-name').value = '';
+        document.getElementById('new-proj-file').value = '';
+        syncFullStateToCloud(); renderProjectsManagerList(); renderAll();
+      });
+    }
+
+    // ==================== CALENDARIO ====================
+    function changeMonth(d) { currentCalDate.setMonth(currentCalDate.getMonth() + d); renderCalendar(); }
+    function renderCalendar() {
+      const y = currentCalDate.getFullYear(), m = currentCalDate.getMonth();
+      const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      document.getElementById('calendar-month-label').textContent = `${months[m]} ${y}`;
+      const first = new Date(y, m, 1).getDay(), days = new Date(y, m + 1, 0).getDate();
+      let html = '';
+      for (let i = 0; i < first; i++) html += `<div class="min-h-[95px] bg-kraft-50/40 p-2"></div>`;
+      for (let d = 1; d <= days; d++) {
+        const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const items = workshops.filter(w => w.date === ds);
+        html += `<div class="min-h-[95px] p-2 bg-white"><div class="text-xs font-bold text-kraft-700">${d}</div><div class="space-y-1 mt-1">${items.map(w => `<button onclick="openWorkshopDetail('${w.id}')" class="w-full text-left p-1.5 rounded-lg bg-kraft-600 hover:bg-terracota text-white text-[10px] font-bold truncate">${escAttr(w.title)}</button>`).join('')}</div></div>`;
+      }
+      document.getElementById('calendar-grid').innerHTML = html;
+    }
+
+    // ==================== CONTACTOS Y DETALLES ====================
+    function renderContacts() {
+      const q = (document.getElementById('search-contact')?.value || '').toLowerCase();
+      const roleFilter = document.getElementById('filter-contact-role')?.value || 'todos';
+      const today = todayISO();
+
+      const map = new Map();
+      const keyOf = (name, phone) => cleanPhoneNum(phone) || String(name || '').trim().toLowerCase();
+
+      contacts.forEach(c => {
+        const k = keyOf(c.name, c.phone);
+        map.set(k, { ...c, regs: [], creds: [], sales: [] });
+      });
+      registrations.forEach(r => {
+        const k = keyOf(r.name, r.phone);
+        if (!map.has(k)) map.set(k, { id: 'auto-' + k, name: r.name, phone: r.phone, email: r.email || '', role: 'Alumna', project: r.project, product: '', notes: '', regs: [], creds: [], sales: [] });
+        map.get(k).regs.push(r);
+      });
+      credits.forEach(cr => {
+        const k = keyOf(cr.name, cr.phone);
+        if (!map.has(k)) map.set(k, { id: 'auto-' + k, name: cr.name, phone: cr.phone, email: cr.email || '', role: 'Alumna', project: '', product: '', notes: '', regs: [], creds: [], sales: [] });
+        map.get(k).creds.push(cr);
+      });
+      sales.forEach(sl => {
+        const k = keyOf(sl.customer, sl.phone);
+        if (!map.has(k)) map.set(k, { id: 'auto-' + k, name: sl.customer, phone: sl.phone || '', email: '', role: 'Producto', project: '', product: sl.productName, notes: '', regs: [], creds: [], sales: [] });
+        map.get(k).sales.push(sl);
+      });
+
+      const list = Array.from(map.values()).filter(c => {
+        const matchText = c.name.toLowerCase().includes(q) || String(c.phone || '').includes(q);
+        const matchRole = roleFilter === 'todos' || c.role === roleFilter;
+        return matchText && matchRole;
+      });
+
+      document.getElementById('contacts-grid').innerHTML = !list.length
+        ? `<div class="col-span-full p-8 text-center bg-white rounded-2xl border border-kraft-200 text-xs text-kraft-500">Sin contactos con ese filtro.</div>`
+        : list.map(c => {
+            const availCreds = c.creds.filter(x => x.status === 'Disponible');
+            const realCt = contacts.find(x => x.id === c.id);
+            return `
+              <div class="bg-white rounded-2xl border border-kraft-200 p-5 shadow-sm flex flex-col justify-between space-y-3">
+                <div>
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <h3 class="font-serif text-2xl font-bold text-kraft-900">${escAttr(c.name)}</h3>
+                      <p class="text-xs text-kraft-600">${escAttr(c.phone || 'Sin teléfono')} ${c.email ? '• ' + escAttr(c.email) : ''}</p>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${c.role === 'Producto' ? 'bg-oliva text-white' : (c.role === 'Ambos' ? 'bg-terracota text-white' : 'bg-kraft-100 text-kraft-800')}">${escAttr(c.role)}</span>
+                      ${realCt ? `<button onclick="openContactModal('${c.id}')" class="p-1 text-kraft-500 hover:text-kraft-900"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>` : ''}
+                    </div>
+                  </div>
+
+                  ${availCreds.length ? `
+                    <div class="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 space-y-2">
+                      <div class="text-[10px] font-bold uppercase text-amber-900">Crédito por Desinscripción</div>
+                      ${availCreds.map(cr => `
+                        <div class="flex items-center justify-between text-xs">
+                          <div><strong>${formatARS(cr.amount)}</strong> <span class="text-[11px] text-amber-800">(${escAttr(cr.fromWorkshopTitle)})</span></div>
+                          <button onclick="reubicarCredito('${cr.id}')" class="px-2.5 py-1 rounded-lg bg-amber-700 text-white text-[10px] font-bold">Reubicar</button>
+                        </div>`).join('')}
+                    </div>` : ''}
+
+                  <div class="mt-3 pt-2 border-t border-kraft-100 space-y-1.5 text-xs">
+                    ${c.regs.map(r => {
+                      const ws = workshops.find(w => w.id === r.workshopId);
+                      const statusTime = ws?.date ? (ws.date < today ? 'Hizo' : (ws.date === today ? 'Hoy' : 'Hará')) : 'Taller';
+                      return `<div onclick="openFichaModal('${r.id}')" class="cursor-pointer p-2 rounded-lg bg-kraft-50 hover:bg-kraft-100 flex justify-between"><span><strong>${statusTime}:</strong> ${escAttr(ws?.title || 'Taller')} (${escAttr(r.project || '')})</span><span class="font-bold text-kraft-700">${formatARS(r.paid)}/${formatARS(r.total)}</span></div>`;
+                    }).join('')}
+                    ${c.sales.map(s => `<div class="p-2 rounded-lg bg-emerald-50/70 flex justify-between"><span>🛍️ Compró: <strong>${escAttr(s.productName)}</strong> (${s.qty}u)</span><span class="font-bold text-emerald-700">${formatARS(s.total)}</span></div>`).join('')}
+                    ${c.project && !c.regs.length ? `<div class="text-[11px] text-kraft-700 capitalize">Proyecto asociado: <strong>${escAttr(c.project)}</strong></div>` : ''}
+                    ${c.product ? `<div class="text-[11px] text-oliva font-semibold">Interés en producto: ${escAttr(c.product)}</div>` : ''}
+                    ${c.notes ? `<div class="text-[11px] text-kraft-500 italic">"${escAttr(c.notes)}"</div>` : ''}
+                  </div>
+                </div>
+                <div class="pt-2 border-t border-kraft-100 flex justify-end">
+                  <a href="https://wa.me/549${cleanPhoneNum(c.phone)}?text=${encodeURIComponent(`¡Hola ${c.name.split(' ')[0]}! Te escribo de DecoMiAlma 🤎`)}" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp</a>
+                </div>
+              </div>`;
+          }).join('');
+    }
+
+    function openContactModal(id = null) {
+      const ct = contacts.find(c => c.id === id);
+      document.getElementById('ct-project').innerHTML = `<option value="">-- Ninguno --</option>` + projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('');
+      document.getElementById('ct-product').innerHTML = `<option value="">-- Ninguno --</option>` + products.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('');
+      document.getElementById('ct-id').value = ct?.id || '';
+      document.getElementById('ct-name').value = ct?.name || '';
+      document.getElementById('ct-phone').value = ct?.phone || '';
+      document.getElementById('ct-email').value = ct?.email || '';
+      document.getElementById('ct-role').value = ct?.role || 'Alumna';
+      document.getElementById('ct-project').value = ct?.project || '';
+      document.getElementById('ct-product').value = ct?.product || '';
+      document.getElementById('ct-notes').value = ct?.notes || '';
+      document.getElementById('btn-ct-delete').classList.toggle('hidden', !ct);
+      openModal('modal-contact-form');
+    }
+    function saveContact(e) {
+      e.preventDefault();
+      const id = document.getElementById('ct-id').value || ('ct-' + Date.now());
+      const obj = {
+        id, name: document.getElementById('ct-name').value.trim(),
+        phone: document.getElementById('ct-phone').value.trim(),
+        email: document.getElementById('ct-email').value.trim(),
+        role: document.getElementById('ct-role').value,
+        project: document.getElementById('ct-project').value,
+        product: document.getElementById('ct-product').value,
+        notes: document.getElementById('ct-notes').value.trim()
+      };
+      const idx = contacts.findIndex(c => c.id === id);
+      if (idx >= 0) contacts[idx] = obj; else contacts.unshift(obj);
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-contact-form'); renderAll();
+    }
+    function deleteContact() {
+      const id = document.getElementById('ct-id').value;
+      if (!id || !confirm('¿Eliminar este contacto de la agenda?')) return;
+      contacts = contacts.filter(c => c.id !== id);
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-contact-form'); renderAll();
+    }
+
+    // ==================== PRODUCTOS Y VENTAS ====================
+    function renderProducts() {
+      const q = (document.getElementById('filter-prod-search')?.value || '').toLowerCase();
+      const st = document.getElementById('filter-prod-stock')?.value || 'todos';
+
+      document.getElementById('prod-kpi-count').textContent = products.length;
+      document.getElementById('prod-kpi-stock').textContent = products.reduce((a, p) => a + Number(p.stock || 0), 0);
+      document.getElementById('prod-kpi-sold').textContent = products.reduce((a, p) => a + Number(p.sold || 0), 0);
+      document.getElementById('prod-kpi-revenue').textContent = formatARS(sales.reduce((a, s) => a + Number(s.total || 0), 0));
+
+      const filtered = products.filter(p => {
+        const mQ = p.name.toLowerCase().includes(q) || (p.category || '').toLowerCase().includes(q);
+        const mS = st === 'todos' || (st === 'disponible' ? Number(p.stock) > 0 : Number(p.stock) <= 0);
+        return mQ && mS;
+      });
+
+      document.getElementById('products-grid').innerHTML = filtered.map(p => {
+        const margin = Number(p.price || 0) - Number(p.cost || 0);
+        return `
+          <div class="bg-white rounded-2xl border border-kraft-200 shadow-sm overflow-hidden flex flex-col justify-between">
+            <div class="p-4 space-y-3">
+              <div class="flex items-start gap-3">
+                <img src="${p.image || makeProjectSvg(p.name)}" class="w-20 h-20 rounded-xl object-cover border border-kraft-200 bg-kraft-50 shrink-0" />
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-kraft-100 text-kraft-700">${escAttr(p.category || 'Deco')}</span>
+                    <div class="flex gap-1">
+                      <button onclick="openProductModal('${p.id}')" class="p-1 text-kraft-600 hover:bg-kraft-100 rounded"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+                      <button onclick="deleteProduct('${p.id}')" class="p-1 text-red-600 hover:bg-red-50 rounded"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                    </div>
+                  </div>
+                  <h3 class="font-serif text-xl font-bold text-kraft-900 mt-1 truncate">${escAttr(p.name)}</h3>
+                  <div class="text-xs font-bold ${Number(p.stock) > 0 ? 'text-emerald-700' : 'text-red-600'}">Stock: ${p.stock} u. • Vendidos: ${p.sold || 0}</div>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 bg-kraft-50 p-2.5 rounded-xl text-center text-xs">
+                <div><div class="text-[10px] text-kraft-500">Costo</div><div class="font-bold">${formatARS(p.cost)}</div></div>
+                <div><div class="text-[10px] text-kraft-500">Venta</div><div class="font-bold text-kraft-900">${formatARS(p.price)}</div></div>
+                <div><div class="text-[10px] text-kraft-500">Ganancia</div><div class="font-bold text-emerald-700">${formatARS(margin)}</div></div>
+              </div>
+            </div>
+            <div class="px-4 py-2.5 bg-kraft-50 border-t border-kraft-100 flex justify-end">
+              <button onclick="openSaleModal('${p.id}')" class="text-xs font-bold text-terracota hover:underline">+ Registrar Venta</button>
+            </div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('sales-history-list').innerHTML = !sales.length
+        ? `<div class="py-4 text-center text-xs text-kraft-500">Sin ventas registradas aún.</div>`
+        : sales.map(s => `
+            <div class="py-2.5 flex items-center justify-between text-xs">
+              <div><strong>${escAttr(s.productName)}</strong> (${s.qty} u.) • Cliente: ${escAttr(s.customer)} <span class="text-kraft-500">(${formatDateHuman(s.date)})</span></div>
+              <div class="flex items-center gap-2"><span class="font-bold text-emerald-700">${formatARS(s.total)}</span><button onclick="deleteSale('${s.id}')" class="text-kraft-400 hover:text-red-600"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div>
+            </div>`).join('');
+    }
+
+    function openProductModal(id = null) {
+      const p = products.find(x => x.id === id);
+      document.getElementById('pr-id').value = p?.id || '';
+      document.getElementById('pr-name').value = p?.name || '';
+      document.getElementById('pr-category').value = p?.category || 'Deco Kraft';
+      document.getElementById('pr-stock').value = p?.stock ?? 1;
+      document.getElementById('pr-cost').value = p?.cost ?? 0;
+      document.getElementById('pr-price').value = p?.price ?? 0;
+      document.getElementById('pr-sold').value = p?.sold ?? 0;
+      document.getElementById('pr-file').value = '';
+      openModal('modal-product-form');
+    }
+    function saveProduct(e) {
+      e.preventDefault();
+      const id = document.getElementById('pr-id').value || ('prod-' + Date.now());
+      const prev = products.find(x => x.id === id);
+      const name = document.getElementById('pr-name').value.trim();
+      compressImageFile(document.getElementById('pr-file').files[0], img => {
+        const obj = {
+          id, name, category: document.getElementById('pr-category').value.trim(),
+          stock: Number(document.getElementById('pr-stock').value),
+          cost: Number(document.getElementById('pr-cost').value),
+          price: Number(document.getElementById('pr-price').value),
+          sold: Number(document.getElementById('pr-sold').value),
+          image: img || prev?.image || makeProjectSvg(name)
+        };
+        const idx = products.findIndex(x => x.id === id);
+        if (idx >= 0) products[idx] = obj; else products.unshift(obj);
+        saveLocal(); syncFullStateToCloud(); closeModal('modal-product-form'); renderAll();
+      });
+    }
+    function deleteProduct(id) {
+      if (!confirm('¿Eliminar este producto del catálogo?')) return;
+      products = products.filter(p => p.id !== id);
+      saveLocal(); syncFullStateToCloud(); renderAll();
+    }
+    function openSaleModal(preProdId = null) {
+      const sel = document.getElementById('sl-product');
+      sel.innerHTML = products.map(p => `<option value="${p.id}">${escAttr(p.name)} (Stock: ${p.stock} • ${formatARS(p.price)})</option>`).join('');
+      if (preProdId) sel.value = preProdId;
+      document.getElementById('sl-customer').value = '';
+      document.getElementById('sl-phone').value = '';
+      document.getElementById('sl-qty').value = 1;
+      document.getElementById('sl-date').value = todayISO();
+      onSelectSaleProduct();
+      openModal('modal-sale-form');
+    }
+    function onSelectSaleProduct() {
+      const p = products.find(x => x.id === document.getElementById('sl-product').value);
+      if (p) document.getElementById('sl-price').value = p.price;
+    }
+    function saveSale(e) {
+      e.preventDefault();
+      const prod = products.find(x => x.id === document.getElementById('sl-product').value);
+      if (!prod) return;
+      const qty = Number(document.getElementById('sl-qty').value || 1);
+      const unitPrice = Number(document.getElementById('sl-price').value || 0);
+      const customer = document.getElementById('sl-customer').value.trim();
+      const phone = document.getElementById('sl-phone').value.trim();
+      sales.unshift({
+        id: 'sale-' + Date.now(), productId: prod.id, productName: prod.name,
+        customer, phone, qty, unitPrice, total: qty * unitPrice, date: document.getElementById('sl-date').value
+      });
+      prod.stock = Math.max(0, Number(prod.stock || 0) - qty);
+      prod.sold = Number(prod.sold || 0) + qty;
+      upsertContactAuto({ name: customer, phone, role: 'Producto', product: prod.name, notes: `Compró ${qty}u ${prod.name}` });
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-sale-form'); renderAll();
+    }
+    function deleteSale(id) {
+      if (!confirm('¿Eliminar esta venta?')) return;
+      sales = sales.filter(s => s.id !== id);
+      saveLocal(); syncFullStateToCloud(); renderAll();
+    }
+
+    // ==================== CONTABILIDAD (RESUMEN + TABLA EDITABLE) ====================
+    function setAccountingView(mode) {
+      accountingViewMode = mode;
+      document.getElementById('acc-view-resumen').classList.toggle('hidden', mode !== 'resumen');
+      document.getElementById('acc-view-tabla').classList.toggle('hidden', mode !== 'tabla');
+      document.getElementById('btn-acc-resumen').className = mode === 'resumen' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-kraft-600 text-white' : 'px-3 py-1.5 rounded-lg text-xs font-bold text-kraft-700';
+      document.getElementById('btn-acc-tabla').className = mode === 'tabla' ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-kraft-600 text-white' : 'px-3 py-1.5 rounded-lg text-xs font-bold text-kraft-700';
+      renderAccountingTable();
+      lucide.createIcons();
+    }
+
+    function renderAccounting() {
+      const fin = computeFinanceTotals();
+      document.getElementById('acc-income').textContent = formatARS(fin.totalIncome);
+      document.getElementById('acc-expenses').textContent = formatARS(fin.totalExpenses);
+      document.getElementById('acc-net').textContent = formatARS(fin.net);
+      document.getElementById('acc-receivable').textContent = formatARS(fin.totalPending);
+      document.getElementById('acc-credits-sub').textContent = `Créditos a favor: ${formatARS(fin.activeCredits)}`;
+
+      const wsSel = document.getElementById('acc-f-workshop');
+      const curWs = wsSel.value || 'todos';
+      wsSel.innerHTML = `<option value="todos">Taller: Todos</option>` + workshops.map(w => `<option value="${w.id}">${escAttr(w.title)}</option>`).join('');
+      wsSel.value = curWs;
+
+      const pSel = document.getElementById('acc-f-project');
+      const curP = pSel.value || 'todos';
+      pSel.innerHTML = `<option value="todos">Proyecto: Todos</option>` + projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('');
+      pSel.value = curP;
+
+      const expensesOnly = accountingEntries.filter(e => e.type === 'Gasto');
+      document.getElementById('expenses-list').innerHTML = !expensesOnly.length
+        ? `<div class="py-6 text-center text-xs text-kraft-500">Sin gastos cargados.</div>`
+        : expensesOnly.map(e => `
+            <div class="py-3 flex items-center justify-between text-xs">
+              <div><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-kraft-100 text-kraft-700">${escAttr(e.category)}</span><div class="font-bold text-kraft-900 mt-1">${escAttr(e.description)}</div><div class="text-[11px] text-kraft-500">${formatDateHuman(e.date)}</div></div>
+              <div class="flex items-center gap-2"><span class="font-bold text-red-700">-${formatARS(e.amount)}</span><button onclick="openAccountEntryModal('${e.id}')" class="text-kraft-500 hover:text-kraft-900"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteAccountEntry('${e.id}')" class="text-kraft-400 hover:text-red-600"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div>
+            </div>`).join('');
+
+      const rows = buildUnifiedAccountingRows().filter(r => r.type === 'Ingreso');
+      document.getElementById('accounting-ledger-list').innerHTML = rows.slice(0, 15).map(r => `
+        <div class="py-2.5 flex justify-between text-xs">
+          <div><div class="font-bold text-kraft-900">${escAttr(r.description)}</div><div class="text-[11px] text-kraft-500">${escAttr(r.category)} • ${escAttr(r.workshopTitle)}</div></div>
+          <span class="font-bold text-emerald-700">+${formatARS(r.amount)}</span>
+        </div>`).join('');
+
+      renderAccountingTable();
+    }
+
+    function renderAccountingTable() {
+      const q = (document.getElementById('acc-f-search')?.value || '').toLowerCase();
+      const fType = document.getElementById('acc-f-type')?.value || 'todos';
+      const fWs = document.getElementById('acc-f-workshop')?.value || 'todos';
+      const fProj = document.getElementById('acc-f-project')?.value || 'todos';
+      const fCat = document.getElementById('acc-f-category')?.value || 'todos';
+
+      const rows = buildUnifiedAccountingRows().filter(r => {
+        if (fType !== 'todos' && r.type !== fType) return false;
+        if (fWs !== 'todos' && r.workshopId !== fWs) return false;
+        if (fProj !== 'todos' && !String(r.project || '').toLowerCase().includes(fProj.toLowerCase())) return false;
+        if (fCat !== 'todos' && r.category !== fCat) return false;
+        if (q && !(r.description.toLowerCase().includes(q) || r.workshopTitle.toLowerCase().includes(q))) return false;
+        return true;
+      });
+
+      const sumIn = rows.filter(r => r.type === 'Ingreso').reduce((a, b) => a + b.amount, 0);
+      const sumOut = rows.filter(r => r.type === 'Gasto').reduce((a, b) => a + b.amount, 0);
+
+      document.getElementById('accounting-table-body').innerHTML = !rows.length
+        ? `<tr><td colspan="7" class="p-6 text-center text-kraft-500">No hay movimientos para esos filtros.</td></tr>`
+        : rows.map(r => `
+            <tr class="hover:bg-kraft-50/50">
+              <td class="p-3 whitespace-nowrap">${formatDateHuman(r.date)}</td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${r.type === 'Ingreso' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-700'}">${r.type}</span></td>
+              <td class="p-3">${escAttr(r.category)}</td>
+              <td class="p-3 font-semibold text-kraft-900">${escAttr(r.description)}</td>
+              <td class="p-3 capitalize text-kraft-600">${escAttr(r.workshopTitle)}${r.project ? ' • ' + escAttr(r.project) : ''}</td>
+              <td class="p-3 text-right font-bold ${r.type === 'Ingreso' ? 'text-emerald-700' : 'text-red-700'}">${r.type === 'Ingreso' ? '+' : '-'}${formatARS(r.amount)}</td>
+              <td class="p-3 text-right whitespace-nowrap">
+                ${r.editable
+                  ? `<button onclick="openAccountEntryModal('${r.id}')" class="px-2 py-1 rounded bg-kraft-100 hover:bg-kraft-200 font-bold text-[10px] mr-1">Editar</button><button onclick="deleteAccountEntry('${r.id}')" class="px-2 py-1 rounded bg-red-50 text-red-700 font-bold text-[10px]">Eliminar</button>`
+                  : `<span class="text-[10px] text-kraft-400">Auto-vinculado</span>`}
+              </td>
+            </tr>`).join('');
+
+      document.getElementById('accounting-table-foot').innerHTML = `
+        <tr>
+          <td colspan="5" class="p-3 text-right">Totales filtrados (${rows.length} mov.): Ingresos ${formatARS(sumIn)} | Gastos ${formatARS(sumOut)} → Neto:</td>
+          <td class="p-3 text-right ${sumIn - sumOut >= 0 ? 'text-emerald-700' : 'text-red-700'}">${formatARS(sumIn - sumOut)}</td>
+          <td></td>
+        </tr>`;
+    }
+
+    function openAccountEntryModal(id = null, defaultType = 'Gasto') {
+      const e = accountingEntries.find(x => x.id === id);
+      document.getElementById('ae-workshop').innerHTML = `<option value="">-- General --</option>` + workshops.map(w => `<option value="${w.id}">${escAttr(w.title)}</option>`).join('');
+      document.getElementById('ae-project').innerHTML = `<option value="">-- Ninguno --</option>` + projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('');
+      document.getElementById('ae-id').value = e?.id || '';
+      document.getElementById('ae-type').value = e?.type || defaultType;
+      document.getElementById('ae-category').value = e?.category || (defaultType === 'Gasto' ? 'Materiales y Kraft' : 'Otros');
+      document.getElementById('ae-desc').value = e?.description || '';
+      document.getElementById('ae-workshop').value = e?.workshopId || '';
+      document.getElementById('ae-project').value = e?.project || '';
+      document.getElementById('ae-amount').value = e?.amount || '';
+      document.getElementById('ae-date').value = e?.date || todayISO();
+      openModal('modal-account-entry');
+    }
+    function saveAccountEntry(ev) {
+      ev.preventDefault();
+      const id = document.getElementById('ae-id').value || ('ae-' + Date.now());
+      const obj = {
+        id, type: document.getElementById('ae-type').value,
+        category: document.getElementById('ae-category').value,
+        description: document.getElementById('ae-desc').value.trim(),
+        workshopId: document.getElementById('ae-workshop').value,
+        project: document.getElementById('ae-project').value,
+        amount: Number(document.getElementById('ae-amount').value),
+        date: document.getElementById('ae-date').value
+      };
+      const idx = accountingEntries.findIndex(x => x.id === id);
+      if (idx >= 0) accountingEntries[idx] = obj; else accountingEntries.unshift(obj);
+      saveLocal(); syncFullStateToCloud(); closeModal('modal-account-entry'); renderAll();
+    }
+    function deleteAccountEntry(id) {
+      if (!confirm('¿Eliminar este movimiento contable?')) return;
+      accountingEntries = accountingEntries.filter(x => x.id !== id);
+      saveLocal(); syncFullStateToCloud(); renderAll();
+    }
+    function exportAccountingCSV() {
+      const rows = buildUnifiedAccountingRows();
+      const csv = ['Fecha,Tipo,Rubro,Detalle,Taller,Proyecto,Monto']
+        .concat(rows.map(r => `"${r.date}","${r.type}","${r.category}","${r.description.replace(/"/g,'""')}","${r.workshopTitle}","${r.project}",${r.type==='Gasto'?-r.amount:r.amount}`))
+        .join('\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+      a.download = `Contabilidad-DecoMiAlma-${todayISO()}.csv`; a.click();
+    }
+
+    // ==================== CREADOR DE FORMULARIO PROPIO & FORMULARIO PÚBLICO ====================
+    function openFormBuilderModal() {
+      document.getElementById('fb-title').value = formConfig.title;
+      document.getElementById('fb-subtitle').value = formConfig.subtitle;
+      renderFormBuilderFields();
+      updateGeneratedFormLink();
+      openModal('modal-form-builder');
+      lucide.createIcons();
+    }
+    function renderFormBuilderFields() {
+      document.getElementById('fb-fields-list').innerHTML = (formConfig.fields || []).map((f, i) => `
+        <div class="p-3 bg-white rounded-xl border border-kraft-200 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center text-xs">
+          <input value="${escAttr(f.label)}" onchange="formConfig.fields[${i}].label=this.value" placeholder="Pregunta" class="sm:col-span-5 px-2.5 py-1.5 rounded-lg border border-kraft-300" />
+          <select onchange="formConfig.fields[${i}].type=this.value;renderFormBuilderFields()" class="sm:col-span-3 px-2 py-1.5 rounded-lg border border-kraft-300 bg-white">
+            <option value="text" ${f.type==='text'?'selected':''}>Texto libre</option>
+            <option value="select" ${f.type==='select'?'selected':''}>Lista opciones</option>
+          </select>
+          <input value="${escAttr(f.options||'')}" onchange="formConfig.fields[${i}].options=this.value" placeholder="${f.type==='select'?'Opción 1, Opción 2':'(sin opciones)'}" class="sm:col-span-3 px-2.5 py-1.5 rounded-lg border border-kraft-300 ${f.type==='select'?'':'opacity-40'}" ${f.type==='select'?'':'disabled'} />
+          <button type="button" onclick="formConfig.fields.splice(${i},1);renderFormBuilderFields()" class="sm:col-span-1 text-red-600 font-bold text-center">✕</button>
+        </div>`).join('');
+    }
+    function addFormBuilderField() {
+      formConfig.fields.push({ id: 'f-' + Date.now(), label: 'Nueva pregunta', type: 'text', options: '' });
+      renderFormBuilderFields();
+    }
+    function updateGeneratedFormLink() {
+      const base = window.location.href.split('?')[0].split('#')[0];
+      const apiParam = config.scriptUrl ? `&api=${encodeURIComponent(config.scriptUrl)}` : '';
+      document.getElementById('fb-generated-link').value = `${base}?modo=formulario${apiParam}`;
+    }
+    function copyPublicFormLink() {
+      const el = document.getElementById('fb-generated-link');
+      el.select();
+      if (navigator.clipboard) navigator.clipboard.writeText(el.value);
+      alert('¡Link copiado! Ya podés pegarlo en Instagram o WhatsApp.');
+    }
+    function saveFormBuilderConfig() {
+      formConfig.title = document.getElementById('fb-title').value.trim();
+      formConfig.subtitle = document.getElementById('fb-subtitle').value.trim();
+      saveLocal(); syncFullStateToCloud(); updateGeneratedFormLink();
+      alert('Formulario actualizado y guardado en la base.');
+    }
+
+    function openPublicFormPreview() {
+      isPreviewingForm = true;
+      closeModal('modal-form-builder');
+      document.getElementById('pub-back-admin-btn').classList.remove('hidden');
+      document.getElementById('pub-success-back-btn').classList.remove('hidden');
+      enterPublicFormMode();
+    }
+    function exitPublicFormPreview() {
+      isPreviewingForm = false;
+      document.getElementById('public-form-shell').classList.add('hidden');
+      document.getElementById('admin-app-shell').classList.remove('hidden');
+      renderAll();
+    }
+    function enterPublicFormMode() {
+      document.getElementById('admin-app-shell').classList.add('hidden');
+      document.getElementById('public-form-shell').classList.remove('hidden');
+      document.getElementById('pub-success-box').classList.add('hidden');
+      document.getElementById('public-submit-form').classList.remove('hidden');
+      document.getElementById('pub-form-title').textContent = formConfig.title;
+      document.getElementById('pub-form-subtitle').textContent = formConfig.subtitle;
+      renderPublicDynamicSelection();
+      document.getElementById('pub-custom-fields').innerHTML = (formConfig.fields || []).map(f => {
+        if (f.type === 'select') {
+          const opts = String(f.options || '').split(',').map(s => s.trim()).filter(Boolean);
+          return `<div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">${escAttr(f.label)}</label><select data-custom-label="${escAttr(f.label)}" class="pub-custom-input w-full px-3.5 py-2.5 rounded-xl border border-kraft-300 bg-white">${opts.map(o => `<option value="${escAttr(o)}">${escAttr(o)}</option>`).join('')}</select></div>`;
+        }
+        return `<div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">${escAttr(f.label)}</label><input data-custom-label="${escAttr(f.label)}" type="text" class="pub-custom-input w-full px-3.5 py-2.5 rounded-xl border border-kraft-300" /></div>`;
+      }).join('');
+      lucide.createIcons();
+    }
+    function renderPublicDynamicSelection() {
+      const t = document.getElementById('pub-interest-type').value;
+      const box = document.getElementById('pub-dynamic-selection');
+      if (t === 'taller') {
+        box.innerHTML = `
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Elegí el Taller *</label>
+          <select id="pub-ws-id" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white">${workshops.map(w => `<option value="${w.id}">${escAttr(w.title)} — ${formatDateHuman(w.date)} (${formatARS(w.price)})</option>`).join('')}</select></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Proyecto que querés realizar *</label>
+          <select id="pub-proj-name" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white capitalize">${projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('')}</select></div>`;
+      } else if (t === 'clase') {
+        box.innerHTML = `
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Grupo de Clases Regulares (4 clases)</label>
+          <select id="pub-rc-id" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white">${regularClasses.map(g => `<option value="${g.id}">${escAttr(g.title)} (${formatARS(g.price)})</option>`).join('')}</select></div>
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Proyecto inicial deseado</label>
+          <select id="pub-proj-name" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white capitalize">${projects.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)}</option>`).join('')}</select></div>`;
+      } else {
+        box.innerHTML = `
+          <div><label class="block text-xs font-bold uppercase text-kraft-600 mb-1">Producto de interés *</label>
+          <select id="pub-prod-name" class="w-full px-3 py-2 rounded-xl border border-kraft-300 bg-white">${products.map(p => `<option value="${escAttr(p.name)}">${escAttr(p.name)} — ${formatARS(p.price)}</option>`).join('')}</select></div>`;
+      }
+    }
+    async function submitPublicForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('pub-name').value.trim();
+      const phone = document.getElementById('pub-phone').value.trim();
+      const email = document.getElementById('pub-email').value.trim();
+      const interestType = document.getElementById('pub-interest-type').value;
+      const extraAnswers = Array.from(document.querySelectorAll('.pub-custom-input')).map(el => `${el.dataset.customLabel}: ${el.value}`).join(' | ');
+
+      if (interestType === 'taller') {
+        const wsId = document.getElementById('pub-ws-id')?.value || workshops[0]?.id;
+        const ws = workshops.find(w => w.id === wsId);
+        const proj = document.getElementById('pub-proj-name')?.value || ws?.project || 'espejo';
+        registrations.push({
+          id: 'reg-' + Date.now(), workshopId: wsId, name, phone, email,
+          project: proj, total: ws?.price || 0, paid: 0, notes: 'Formulario Web | ' + extraAnswers
+        });
+        upsertContactAuto({ name, phone, email, role: 'Alumna', project: proj, notes: `Se anotó por formulario a ${ws?.title || 'Taller'}` });
+      } else if (interestType === 'clase') {
+        const rcId = document.getElementById('pub-rc-id')?.value;
+        const proj = document.getElementById('pub-proj-name')?.value || 'espejo';
+        const g = regularClasses.find(x => x.id === rcId);
+        if (g) {
+          g.students = g.students || [];
+          g.students.push({ id: 'rcs-' + Date.now(), name, phone, mainProject: proj, extraProject: '', extraCost: 0, paid: 0, attendance: [false, false, false, false] });
+        }
+        upsertContactAuto({ name, phone, email, role: 'Alumna', project: proj, notes: `Formulario Clase Regular (${g?.title || ''}) | ${extraAnswers}` });
+      } else {
+        const prodName = document.getElementById('pub-prod-name')?.value || '';
+        upsertContactAuto({ name, phone, email, role: 'Producto', product: prodName, notes: `Consulta Producto Web | ${extraAnswers}` });
+      }
+
+      saveLocal();
+      const targetApi = new URLSearchParams(window.location.search).get('api') || config.scriptUrl;
+      if (targetApi) {
+        try {
+          await fetch(targetApi, {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'publicFormSubmission', fullState: getFullStateObject() })
+          });
+        } catch (err) { console.warn(err); }
+      }
+      document.getElementById('public-submit-form').classList.add('hidden');
+      document.getElementById('pub-success-box').classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function resetPublicForm() {
+      document.getElementById('public-submit-form').reset();
+      document.getElementById('pub-success-box').classList.add('hidden');
+      document.getElementById('public-submit-form').classList.remove('hidden');
+      renderPublicDynamicSelection();
+    }
+
+    // ==================== CONFIGURACIÓN & SINCRONIZACIÓN CLOUD ====================
+    function openConfigModal() {
+      document.getElementById('config-script-url').value = config.scriptUrl || '';
+      document.getElementById('config-alias').value = config.alias || 'decomialma.mp';
+      document.getElementById('config-location').value = config.location || '';
+      openModal('modal-config');
+    }
+    function saveConfig() {
+      config.scriptUrl = document.getElementById('config-script-url').value.trim();
+      config.alias = document.getElementById('config-alias').value.trim() || 'decomialma.mp';
+      config.location = document.getElementById('config-location').value.trim() || 'Córdoba, Argentina';
+      saveLocal(); closeModal('modal-config'); syncWithCloud();
+    }
+    function updateSyncBadge() {
+      const ok = Boolean(config.scriptUrl);
+      document.getElementById('sync-dot').className = `w-2 h-2 rounded-full ${ok ? 'bg-emerald-500' : 'bg-amber-500'}`;
+      document.getElementById('sync-status').textContent = ok ? 'Conectado a Sheets' : 'Modo Local';
+    }
+    function getFullStateObject() {
+      return { projects, workshops, registrations, regularClasses, contacts, products, sales, accountingEntries, credits, formConfig };
+    }
+    async function syncWithCloud(overrideApi = null) {
+      const api = overrideApi || config.scriptUrl;
+      if (!api) { if (!isPreviewingForm) renderAll(); return; }
+      try {
+        const res = await fetch(api + '?action=getAll');
+        const d = await res.json();
+        if (d.projects?.length) projects = d.projects;
+        if (d.workshops?.length) workshops = d.workshops;
+        if (d.registrations?.length) registrations = d.registrations;
+        if (d.regularClasses?.length) regularClasses = d.regularClasses;
+        if (d.contacts?.length) contacts = d.contacts;
+        if (d.products?.length) products = d.products;
+        if (d.sales?.length) sales = d.sales;
+        if (d.accountingEntries?.length) accountingEntries = d.accountingEntries;
+        if (d.credits?.length) credits = d.credits;
+        if (d.formConfig && d.formConfig.title) formConfig = d.formConfig;
+        saveLocal();
+      } catch (err) { console.warn('Sync error:', err); }
+      if (!isPreviewingForm) renderAll();
+    }
+    async function syncFullStateToCloud() {
+      if (!config.scriptUrl) return;
+      try {
+        await fetch(config.scriptUrl, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'syncAll', fullState: getFullStateObject() })
+        });
+      } catch (err) { console.warn('Push error:', err); }
+    }
+
+    function openModal(id) { const el = document.getElementById(id); el.classList.remove('hidden'); el.classList.add('flex'); }
+    function closeModal(id) { const el = document.getElementById(id); el.classList.add('hidden'); el.classList.remove('flex'); }
+
+    // ==================== INICIALIZACIÓN ====================
+    window.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      const isPublicForm = params.get('modo') === 'formulario';
+      const apiFromUrl = params.get('api');
+
+      if (isPublicForm) {
+        if (apiFromUrl) await syncWithCloud(apiFromUrl);
+        enterPublicFormMode();
+      } else {
+        renderAll();
+        if (config.scriptUrl) syncWithCloud();
+      }
+    });
+  </script>
+</body>
+</html>
